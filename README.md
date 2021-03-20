@@ -24,7 +24,7 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 
 - [x] The user should be able to update the details of a task in their TODO list
 
-- [ ] The user should be able to remove a task from the TODO list
+- [X] The user should be able to remove a task from the TODO list
 
 - [ ] The user should be able to reorder the tasks in the TODO list
 

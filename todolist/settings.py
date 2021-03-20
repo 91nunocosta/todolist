@@ -11,7 +11,7 @@ IF_MATCH = False
 DOMAIN = {
     "tasks": {
         "resource_methods": ["GET", "POST"],
-        "item_methods": ["PATCH"],
+        "item_methods": ["PATCH", "DELETE"],
         "schema": {
             "summary": {"type": "string"},
             "done": {"type": "boolean"},

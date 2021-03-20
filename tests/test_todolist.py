@@ -105,6 +105,31 @@ def test_update_task(client, db):
     assert updated_task["done"] == True
 
 
+def test_remove_task(client, db):
+    db.tasks.drop()
+
+    tasks = [
+        {
+            "summary": "Test listing tasks.",
+            "done": True,
+        },
+        {
+            "summary": "Configure Kubernetes.",
+            "done": False,
+        },
+    ]
+
+    result = db.tasks.insert_many(tasks)
+    some_id = str(result.inserted_ids[0])
+
+    url = f'tasks/{some_id}'
+
+    response = client.delete(url)
+    assert response.status_code == 204
+    
+    assert db.tasks.count()
+
+
 def items_without_meta(items: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """`
     Returns all items contained in a response, excluding all metadata fields.
