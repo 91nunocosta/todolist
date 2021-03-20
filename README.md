@@ -8,7 +8,7 @@ Register
 
     - [ ] store password hash instead of plaintext
 
-- [ ] Usernames must be unique across all users
+- [x] Usernames must be unique across all users
 
 Login
 
