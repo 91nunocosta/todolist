@@ -64,7 +64,17 @@ Now you can easily install the python dependencies in the project:
 $ poetry install
 ```
 
+To be able to run the tests, an instance of MongoDB is needed. For that run:
+```
+$ docker-compose -f docker-file-dev.yaml up -d
+```
+
 Finally, you can run the tests:
 ```
 $ poetry run pytest
+```
+
+For stoping the MongoDB instance (and releasing all the docker resources needed for it), run:
+```
+$ docker-compose -f docker-file-dev.yaml down
 ```
