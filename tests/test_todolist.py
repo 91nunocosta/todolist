@@ -28,6 +28,7 @@ def test_get_root(client):
 
 
 def test_add_taks(client, db):
+    db.tasks.drop()
 
     task = {
         'summary': 'Test todo item creation!',
@@ -37,6 +38,8 @@ def test_add_taks(client, db):
     response = client.post('tasks/', data=task)
 
     assert response.status_code == 201
+
+    assert db.tasks.count() == 1
 
     _id = ObjectId(response.json['_id'])
 
