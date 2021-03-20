@@ -28,7 +28,7 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 
 - [ ] The user should be able to reorder the tasks in the TODO list
 
-- [ ] A task in the TODO list should be able to handle being moved more than - [ ]times
+- [ ] A task in the TODO list should be able to handle being moved more than 50 times
 
 - [ ] A task in the TODO list should be able to handle being moved to more than one task away from its current position
 
