@@ -6,6 +6,7 @@ authors = ["nunocosta <91nunocosta@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+Eve = "^1.1.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
