@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, Iterable, List, Set
 import pytest
 from bson.objectid import ObjectId
 
@@ -73,19 +73,10 @@ def test_add_taks(client, db):
 
     added_task = db.tasks.find_one({"_id": _id})
 
-    assert match(added_task, task)
+    assert items_without_meta([added_task]) == items_without_meta([task])
 
 
-def match(db_dict: Dict[str, Any], request_dict: Dict[str, Any]) -> bool:
-    """`
-    Returns true iff all key-value pairs of request_dict are in db_dict.
-
-    By other words, `db_dict` is the expected MonogoDB representation of the json request body `request_dict.
-    """
-    return all(db_dict[key] == request_dict[key] for key in request_dict)
-
-
-def items_without_meta(items: Dict[str, Any]) -> List[Dict[str, Any]]:
+def items_without_meta(items: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """`
     Returns all items contained in a response, excluding all metadata fields.
     """
