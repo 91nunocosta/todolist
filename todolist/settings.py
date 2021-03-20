@@ -13,14 +13,23 @@ DOMAIN = {
         "resource_methods": ["GET", "POST"],
         "item_methods": ["PATCH", "DELETE"],
         "schema": {
-            "summary": {"type": "string"},
-            "done": {"type": "boolean"},
+            "summary": {
+                "type": "string",
+                "required": True,
+            },
+            "done": {
+                "type": "boolean",
+                "default": False,
+            },
         },
     },
     "accounts": {
         "resource_methods": ["POST"],
         "schema": {
-            "username": {"type": "string"},
+            "username": {
+                "type": "string",
+                "required": True,
+            },
             "password": {
                 "type": "string",
                 "unique": True,
