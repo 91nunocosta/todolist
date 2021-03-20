@@ -76,6 +76,35 @@ def test_add_taks(client, db):
     assert items_without_meta([added_task]) == items_without_meta([task])
 
 
+def test_update_task(client, db):
+    db.tasks.drop()
+
+    task = {
+        "summary": "Test update!",
+        "done": False,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+
+    url = f"tasks/{str(_id)}"
+    print(url)
+    data = {
+        "done": True,
+    }
+
+    response = client.patch(url, data=data)
+
+    print(response.json)
+
+    assert response.status_code == 200
+
+    assert db.tasks.count() == 1
+
+    updated_task = db.tasks.find_one({"_id": _id})
+    assert updated_task is not None
+    assert updated_task["done"] == True
+
+
 def items_without_meta(items: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """`
     Returns all items contained in a response, excluding all metadata fields.
