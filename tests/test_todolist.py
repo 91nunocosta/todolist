@@ -1,25 +1,11 @@
 from typing import Any, Dict, Iterable, List, Set
-import pytest
 from bson.objectid import ObjectId
 
 from todolist import __version__
 
-from todolist.run import app
-
 
 def test_version():
     assert __version__ == "0.1.0"
-
-
-@pytest.fixture
-def client():
-    return app.test_client()
-
-
-@pytest.fixture
-def db():
-    with app.app_context():
-        return app.data.driver.db
 
 
 def test_get_root(client):
