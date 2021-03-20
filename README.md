@@ -33,11 +33,11 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 - [ ] A task in the TODO list should be able to handle being moved to more than one task away from its current position
 
 
-i. Return proper errors with corresponding HTTP codes
+- [x] Return proper errors with corresponding HTTP codes
 
 Note: You can think of this as an API endpoint that will be used to handle the drag and drop feature of a TODO list application
 
-ii. All endpoints should return JSON responses.
+- [x] All endpoints should return JSON responses.
 
 # How to run unit tests locally
 
