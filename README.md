@@ -18,7 +18,7 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 
 - [ ] The user should only be able to access their own tasks
 
-- [ ] The user should be able to list all tasks in the TODO list
+- [x] The user should be able to list all tasks in the TODO list
 
 - [x] The user should be able to add a task to the TODO list
 

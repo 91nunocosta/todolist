@@ -1,6 +1,6 @@
 DOMAIN = {
     "tasks": {
-        "resource_methods": ["POST"],
+        "resource_methods": ["GET", "POST"],
         "schema": {
             "summary": {"type": "string"},
             "done": {"type": "boolean"},
