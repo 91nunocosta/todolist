@@ -16,5 +16,5 @@ DOMAIN = {
             "summary": {"type": "string"},
             "done": {"type": "boolean"},
         },
-    }
+    },
 }

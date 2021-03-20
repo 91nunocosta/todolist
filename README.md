@@ -10,9 +10,13 @@ Register
 
 Login
 
-- [ ] The user should be able to login with the credentials they provided in the register endpoint
+- [x] The user should be able to login with the credentials they provided in the register endpoint
 
 - [ ] Should return an access token than can be used for the other endpoints
+   
+    - [ ] compare hashed password
+   
+    - [ ] generate token
 
 TODO List [tests](./todolist/tests/test_todolist.py)
 
