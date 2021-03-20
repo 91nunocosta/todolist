@@ -39,3 +39,26 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 ii. All endpoints should return JSON responses.
 
+# How to run unit tests locally
+
+To test the application locally you will need:
+- python3
+- pip
+- [docker](https://docs.docker.com/engine/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+
+[Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies in a auto-contained [virtual environment](https://docs.python.org/3/tutorial/venv.html).
+To install it, run:
+```
+$ pip install poetry
+```
+
+Now you can easily install the python dependencies in the project:
+```
+$ poetry install
+```
+
+Finally, you can run the tests:
+```
+$ poetry run pytest
+```
