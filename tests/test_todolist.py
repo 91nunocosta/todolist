@@ -1,6 +1,8 @@
 from typing import Any, Dict, Iterable, List, Set
 from bson.objectid import ObjectId
 
+from tests.helpers import items_without_meta
+
 from todolist import __version__
 
 
@@ -108,24 +110,9 @@ def test_remove_task(client, db):
     result = db.tasks.insert_many(tasks)
     some_id = str(result.inserted_ids[0])
 
-    url = f'tasks/{some_id}'
+    url = f"tasks/{some_id}"
 
     response = client.delete(url)
     assert response.status_code == 204
-    
+
     assert db.tasks.count()
-
-
-def items_without_meta(items: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """`
-    Returns all items contained in a response, excluding all metadata fields.
-    """
-
-    def item_without_meta(item_with_meta: Dict[str, Any]) -> Dict[str, Any]:
-        return {
-            key: value
-            for key, value in item_with_meta.items()
-            if not key.startswith("_")
-        }
-
-    return [item_without_meta(i) for i in items]
