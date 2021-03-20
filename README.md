@@ -4,7 +4,9 @@ Create an API for managing a TODO list with the following specification:
 
 Register
 
-- [ ] The user should be able to register with a username and password
+- [x] The user should be able to register with a username and password
+
+    - [ ] store password hash instead of plaintext
 
 - [ ] Usernames must be unique across all users
 

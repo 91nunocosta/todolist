@@ -17,4 +17,11 @@ DOMAIN = {
             "done": {"type": "boolean"},
         },
     },
+    "accounts": {
+        "resource_methods": ["POST"],
+        "schema": {
+            "username": {"type": "string"},
+            "password": {"type": "string"},
+        },
+    },
 }
