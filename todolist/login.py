@@ -2,6 +2,9 @@ from typing import Any, Dict
 
 from flask import current_app, request
 
+from todolist.auth.passwords import check_password
+from todolist.auth.tokens import token
+
 
 def login():
     db = current_app.data.driver.db
@@ -22,17 +25,3 @@ def login():
     }
 
     return invalid_login_response, 401
-
-
-def token(account: Dict[str, Any]) -> str:
-    """
-    Returns a token that identifies a given user account.
-    """
-    pass
-
-
-def check_password(recieved_password: str, stored_password: str) -> bool:
-    """
-    Check if a recieved password matches the stored password.
-    """
-    pass
