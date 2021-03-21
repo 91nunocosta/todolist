@@ -3,18 +3,6 @@ from bson.objectid import ObjectId
 
 from tests.helpers import items_without_meta
 
-from todolist import __version__
-
-
-def test_version():
-    assert __version__ == "0.1.0"
-
-
-def test_get_root(client):
-    response = client.get("/")
-
-    assert response.status_code == 200
-
 
 def test_list_all_tasks(client, db):
     db.tasks.drop()
