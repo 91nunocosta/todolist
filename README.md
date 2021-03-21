@@ -24,7 +24,7 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 
 - [ ] The user should only be able to access their own tasks
 
-    - [ ] protect tasks endpoints
+    - [x] protect tasks endpoints
 
     - [ ] check token
 

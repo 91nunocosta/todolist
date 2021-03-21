@@ -25,6 +25,7 @@ DOMAIN = {
     },
     "accounts": {
         "resource_methods": ["POST"],
+        "public_methods": ["POST"],
         "schema": {
             "username": {
                 "type": "string",

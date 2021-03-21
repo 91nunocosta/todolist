@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 from tests.helpers import items_without_meta
 
 
-def test_list_all_tasks(client, db):
+def test_list_tasks(db, client, token):
     db.tasks.drop()
 
     tasks = [
@@ -24,14 +24,21 @@ def test_list_all_tasks(client, db):
 
     db.tasks.insert_many(tasks)
 
-    response = client.get("tasks/")
+    response = client.get("tasks/", headers={"Authorization": token})
 
     assert response.status_code == 200
 
     assert items_without_meta(response.json["_items"]) == items_without_meta(tasks)
 
 
-def test_add_taks(client, db):
+def test_unauthorized_list_tasks(client):
+
+    response = client.get("/tasks")
+
+    assert response.status_code == 401
+
+
+def test_add_task(client, db, token):
     db.tasks.drop()
 
     task = {
@@ -39,7 +46,7 @@ def test_add_taks(client, db):
         "done": True,
     }
 
-    response = client.post("tasks/", data=task)
+    response = client.post("tasks/", data=task, headers={"Authorization": token})
 
     assert response.status_code == 201
 
@@ -52,7 +59,14 @@ def test_add_taks(client, db):
     assert items_without_meta([added_task]) == items_without_meta([task])
 
 
-def test_update_task(client, db):
+def test_unauthorized_add_task(client):
+
+    response = client.post("/tasks", json={})
+
+    assert response.status_code == 401
+
+
+def test_update_task(client, db, token):
     db.tasks.drop()
 
     task = {
@@ -63,12 +77,11 @@ def test_update_task(client, db):
     _id = db.tasks.insert_one(task).inserted_id
 
     url = f"tasks/{str(_id)}"
-    print(url)
     data = {
         "done": True,
     }
 
-    response = client.patch(url, data=data)
+    response = client.patch(url, data=data, headers={"Authorization": token})
 
     print(response.json)
 
@@ -81,7 +94,21 @@ def test_update_task(client, db):
     assert updated_task["done"] == True
 
 
-def test_remove_task(client, db):
+def test_unauthorized_update_task(db, client):
+    task = {
+        "summary": "Test update!",
+        "done": False,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+    url = f"/tasks/{_id}"
+
+    response = client.patch(url, json={})
+
+    assert response.status_code == 401
+
+
+def test_remove_task(client, db, token):
     db.tasks.drop()
 
     tasks = [
@@ -100,7 +127,21 @@ def test_remove_task(client, db):
 
     url = f"tasks/{some_id}"
 
-    response = client.delete(url)
+    response = client.delete(url, headers={"Authorization": token})
     assert response.status_code == 204
 
     assert db.tasks.count()
+
+
+def test_unauthorized_delete_task(db, client):
+    task = {
+        "summary": "Test delete!",
+        "done": False,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+
+    url = f"/tasks/{_id}"
+    response = client.delete(url)
+
+    assert response.status_code == 401
