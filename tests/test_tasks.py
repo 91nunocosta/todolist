@@ -4,25 +4,28 @@ from bson.objectid import ObjectId
 from tests.helpers import items_without_meta
 
 
-def test_list_tasks(db, client, token):
+def test_list_tasks(db, client, user, token, another_user):
     db.tasks.drop()
 
     tasks = [
         {
             "summary": "Test listing tasks.",
             "done": True,
+            "_owner": user,
         },
-        {
-            "summary": "Configure Kubernetes.",
-            "done": False,
-        },
-        {
-            "summary": "Configure helm.",
-            "done": False,
-        },
+        {"summary": "Configure Kubernetes.", "done": False, "_owner": user},
+        {"summary": "Configure helm.", "done": False, "_owner": user},
     ]
 
     db.tasks.insert_many(tasks)
+
+    db.tasks.insert_one(
+        {
+            "summary": "Check that he can't see this task, because I'm another user.",
+            "done": True,
+            "_owner": another_user,
+        }
+    )
 
     response = client.get("tasks/", headers={"Authorization": token})
 
@@ -38,7 +41,7 @@ def test_unauthorized_list_tasks(client):
     assert response.status_code == 401
 
 
-def test_add_task(client, db, token):
+def test_add_task(client, db, user, token):
     db.tasks.drop()
 
     task = {
@@ -58,6 +61,8 @@ def test_add_task(client, db, token):
 
     assert items_without_meta([added_task]) == items_without_meta([task])
 
+    assert added_task["_owner"] == user
+
 
 def test_unauthorized_add_task(client):
 
@@ -66,12 +71,13 @@ def test_unauthorized_add_task(client):
     assert response.status_code == 401
 
 
-def test_update_task(client, db, token):
+def test_update_task(client, db, user, token):
     db.tasks.drop()
 
     task = {
         "summary": "Test update!",
         "done": False,
+        "_owner": user,
     }
 
     _id = db.tasks.insert_one(task).inserted_id
@@ -83,8 +89,6 @@ def test_update_task(client, db, token):
 
     response = client.patch(url, data=data, headers={"Authorization": token})
 
-    print(response.json)
-
     assert response.status_code == 200
 
     assert db.tasks.count() == 1
@@ -92,6 +96,30 @@ def test_update_task(client, db, token):
     updated_task = db.tasks.find_one({"_id": _id})
     assert updated_task is not None
     assert updated_task["done"] == True
+
+
+def test_update_task_of_another_user(client, db, user, token, another_user):
+    db.tasks.drop()
+
+    task = {
+        "summary": "Test update!",
+        "done": False,
+        "_owner": another_user,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+
+    url = f"tasks/{str(_id)}"
+    data = {
+        "done": True,
+    }
+
+    response = client.patch(url, data=data, headers={"Authorization": token})
+
+    assert response.status_code == 404
+
+    # ensures nothing was changed
+    assert db.tasks.find_one({"_id": _id})["done"] == False
 
 
 def test_unauthorized_update_task(db, client):
@@ -133,7 +161,28 @@ def test_remove_task(client, db, token):
     assert db.tasks.count()
 
 
-def test_unauthorized_delete_task(db, client):
+def test_remove_task_of_another_user(client, db, user, token, another_user):
+    db.tasks.drop()
+
+    task = {
+        "summary": "Test listing tasks.",
+        "done": True,
+        "_owner": another_user,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+
+    url = f"tasks/{_id}"
+
+    response = client.delete(url, headers={"Authorization": token})
+
+    assert response.status_code == 204
+
+    # ensures that nothing was removed
+    assert db.tasks.count() == 1
+
+
+def test_unauthorized_remove_task(db, client):
     task = {
         "summary": "Test delete!",
         "done": False,

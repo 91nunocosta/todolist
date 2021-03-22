@@ -12,6 +12,7 @@ DOMAIN = {
     "tasks": {
         "resource_methods": ["GET", "POST"],
         "item_methods": ["PATCH", "DELETE"],
+        "auth_field": "_owner",
         "schema": {
             "summary": {
                 "type": "string",

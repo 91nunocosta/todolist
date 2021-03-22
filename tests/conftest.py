@@ -17,7 +17,17 @@ def db():
 
 
 @pytest.fixture
-def token():
+def user():
+    return "91nunocosta@gmail.com"
+
+
+@pytest.fixture
+def another_user():
+    return "william.dev@example.com"
+
+
+@pytest.fixture
+def token(user):
     # the fixture is evaluated before each test who depend on it
     # then it is injected in the test (dependency injection)
     # in this case, after the test ends the context returns here
@@ -25,10 +35,7 @@ def token():
 
     # a patch for mocking the check_token function is started before the test
     # it is finished when the test stops
-
-    username = "91nunocosta@gmail.com"
-
-    token_payload = {"sub": username}
+    token_payload = {"sub": user}
 
     patcher = patch("todolist.run.check_token", lambda _: token_payload)
 

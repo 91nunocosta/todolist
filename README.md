@@ -28,7 +28,7 @@ TODO List [tests](./todolist/tests/test_todolist.py)
 
     - [ ] check token
 
-    - [ ] filter tasks by authenticated user
+    - [x] filter tasks by authenticated user
 
 - [x] The user should be able to list all tasks in the TODO list
 
