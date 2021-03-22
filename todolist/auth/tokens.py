@@ -10,12 +10,12 @@ def get_secret():
     return os.environ["JWT_SECRET"]
 
 
-def generate_token(account: Dict[str, Any]) -> str:
+def generate_token(username: str) -> str:
     """
     Returns a token that identifies a given user account.
     """
     payload = {
-        "sub": account["username"],
+        "sub": username,
         "iat": datetime.utcnow(),
     }
 

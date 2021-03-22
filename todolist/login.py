@@ -16,7 +16,7 @@ def login():
     account = db.accounts.find_one({"username": username})
 
     if account is not None and check_password(password, account["password"]):
-        response = {"token": generate_token(account)}
+        response = {"token": generate_token(username)}
         return response, 200
 
     invalid_login_response = {

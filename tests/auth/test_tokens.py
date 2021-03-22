@@ -18,15 +18,11 @@ FAKE_SECRET = "fake_secret"
 def test_generate_token():
     username = "91nunocosta@gmail.com"
 
-    account = {
-        "username": username,
-    }
-
     jwt_encode_mock = MagicMock(return_value=FAKE_JWT_TOKEN)
     with patch("todolist.auth.tokens.encode", jwt_encode_mock):
         # the JWT secret is passed set by through an environment variable JWT_SECRET
         with patch.dict("os.environ", {"JWT_SECRET": FAKE_SECRET}):
-            token = generate_token(account)
+            token = generate_token(username)
 
     assert token == FAKE_JWT_TOKEN
 
