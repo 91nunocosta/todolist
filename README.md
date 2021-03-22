@@ -20,7 +20,7 @@ Login
    
     - [x] generate token
 
-TODO List [tests](./todolist/tests/test_todolist.py)
+TODO List
 
 - [x] The user should only be able to access their own tasks
 
