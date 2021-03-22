@@ -31,10 +31,11 @@ DOMAIN = {
             "username": {
                 "type": "string",
                 "required": True,
+                "unique": True,
             },
             "password": {
                 "type": "string",
-                "unique": True,
+                "required": True,
             },
         },
     },
