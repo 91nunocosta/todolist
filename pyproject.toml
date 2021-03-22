@@ -8,6 +8,7 @@ authors = ["nunocosta <91nunocosta@gmail.com>"]
 python = "^3.9"
 Eve = "^1.1.5"
 PyJWT = "^2.0.1"
+bcrypt = "^3.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

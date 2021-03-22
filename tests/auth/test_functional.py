@@ -5,6 +5,7 @@ from unittest.mock import patch
 from freezegun import freeze_time
 
 from todolist.auth.tokens import check_token, generate_token
+from todolist.auth.passwords import check_password, password_hash
 
 
 FAKE_JWT_SECRET = "fake_secret"
@@ -25,3 +26,11 @@ def test_generate_and_check_token():
         "sub": username,
         "iat": datetime(2021, 3, 22, 15, 30, 0, 0).timestamp(),
     }
+
+
+def test_hash_and_check_password():
+    password = "unsecurepassword"
+
+    hashed_password = password_hash(password)
+
+    assert check_password(password, hashed_password)

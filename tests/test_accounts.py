@@ -1,3 +1,5 @@
+from unittest.mock import patch, MagicMock
+
 from tests.helpers import items_without_meta
 
 
@@ -6,9 +8,16 @@ def test_add_account(db, client):
 
     account = {"username": "91nunocosta@gmail.com", "password": "unsecurepassword"}
 
-    response = client.post("/accounts", json=account)
+    fake_hash = "fake_token"
+    password_hash_mock = MagicMock(return_value=fake_hash)
+
+    with patch("todolist.run.password_hash", password_hash_mock):
+        response = client.post("/accounts", json=account)
 
     assert response.status_code == 201
+
+    # password should be replaced by the corresponding hash
+    account["password"] = fake_hash
 
     added_account = db.accounts.find_one()
     assert items_without_meta([added_account]) == items_without_meta([account])
