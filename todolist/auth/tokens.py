@@ -1,11 +1,24 @@
 from typing import Any, Dict
+import os
+
+from datetime import datetime
+
+from jwt import encode
+
+
+SECRET_ENV_VARIABLE = "JWT_SECRET"
 
 
 def generate_token(account: Dict[str, Any]) -> str:
     """
     Returns a token that identifies a given user account.
     """
-    pass
+    payload = {
+        "sub": account["username"],
+        "iat": datetime.utcnow(),
+    }
+    secret = os.environ[SECRET_ENV_VARIABLE]
+    return encode(payload, secret)
 
 
 class InvalidToken(Exception):

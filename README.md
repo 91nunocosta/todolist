@@ -18,7 +18,7 @@ Login
    
     - [ ] compare hashed password
    
-    - [ ] generate token
+    - [x] generate token
 
 TODO List [tests](./todolist/tests/test_todolist.py)
 
