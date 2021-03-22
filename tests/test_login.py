@@ -33,7 +33,7 @@ def test_valid_login(db, client):
 
     fake_token = "this_is_a_fake_token"
 
-    with patch("todolist.login.token", lambda _: fake_token):
+    with patch("todolist.login.generate_token", lambda _: fake_token):
         with patch("todolist.login.check_password", lambda _a, _b: True):
             response = client.post("login/", json=data)
 

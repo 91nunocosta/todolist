@@ -3,7 +3,7 @@ from typing import Any, Dict
 from flask import current_app, request
 
 from todolist.auth.passwords import check_password
-from todolist.auth.tokens import token
+from todolist.auth.tokens import generate_token
 
 
 def login():
@@ -16,7 +16,7 @@ def login():
     account = db.accounts.find_one({"username": username})
 
     if account is not None and check_password(password, account["password"]):
-        response = {"token": token(account)}
+        response = {"token": generate_token(account)}
         return response, 200
 
     invalid_login_response = {
