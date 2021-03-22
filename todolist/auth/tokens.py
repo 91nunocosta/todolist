@@ -3,10 +3,11 @@ import os
 
 from datetime import datetime
 
-from jwt import encode
+from jwt import decode, encode
 
 
-SECRET_ENV_VARIABLE = "JWT_SECRET"
+def get_secret():
+    return os.environ["JWT_SECRET"]
 
 
 def generate_token(account: Dict[str, Any]) -> str:
@@ -17,16 +18,8 @@ def generate_token(account: Dict[str, Any]) -> str:
         "sub": account["username"],
         "iat": datetime.utcnow(),
     }
-    secret = os.environ[SECRET_ENV_VARIABLE]
-    return encode(payload, secret)
 
-
-class InvalidToken(Exception):
-    pass
-
-
-class ExpiredToken(Exception):
-    pass
+    return encode(payload, get_secret())
 
 
 def check_token(token: str) -> Dict[str, Any]:
@@ -37,11 +30,10 @@ def check_token(token: str) -> Dict[str, Any]:
 
     Raises ValueError if the token is empty.
 
-    Raises InvalidToken if the token is not authentic. There are two possibilities:
-    - the token was not issued by a trusted authentication server
-    - the token was tempered.
-
-    Raises Expired token if the token is expired.
+    Raises PyJWT exceptions for invalid JWT tokens
+    (see here https://pyjwt.readthedocs.io/en/stable/api.html#exceptions).
     """
     if not token:
         raise ValueError()
+
+    return decode(token, get_secret())
