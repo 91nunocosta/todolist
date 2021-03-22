@@ -22,11 +22,11 @@ Login
 
 TODO List [tests](./todolist/tests/test_todolist.py)
 
-- [] The user should only be able to access their own tasks
+- [x] The user should only be able to access their own tasks
 
     - [x] protect tasks endpoints
 
-    - [ ] check token
+    - [x] check token
 
     - [x] filter tasks by authenticated user
 
