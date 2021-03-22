@@ -14,7 +14,7 @@ Login
 
 - [x] The user should be able to login with the credentials they provided in the register endpoint
 
-- [ ] Should return an access token than can be used for the other endpoints
+- [x] Should return an access token than can be used for the other endpoints
    
     - [ ] compare hashed password
    
@@ -22,7 +22,7 @@ Login
 
 TODO List [tests](./todolist/tests/test_todolist.py)
 
-- [ ] The user should only be able to access their own tasks
+- [] The user should only be able to access their own tasks
 
     - [x] protect tasks endpoints
 

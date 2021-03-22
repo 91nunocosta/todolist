@@ -44,3 +44,8 @@ def token(user):
     yield token_payload
 
     patcher.stop()
+
+
+@pytest.fixture
+def clear_db(db):
+    db.command("dropDatabase")
