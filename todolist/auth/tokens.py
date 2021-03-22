@@ -6,6 +6,9 @@ from datetime import datetime
 from jwt import decode, encode
 
 
+SIGNATURE_ALG = "HS256"
+
+
 def get_secret():
     return os.environ["JWT_SECRET"]
 
@@ -19,7 +22,7 @@ def generate_token(username: str) -> str:
         "iat": datetime.utcnow(),
     }
 
-    return encode(payload, get_secret())
+    return encode(payload, get_secret(), algorithm=SIGNATURE_ALG)
 
 
 def check_token(token: str) -> Dict[str, Any]:
@@ -36,4 +39,4 @@ def check_token(token: str) -> Dict[str, Any]:
     if not token:
         raise ValueError()
 
-    return decode(token, get_secret())
+    return decode(token, get_secret(), algorithms=[SIGNATURE_ALG])

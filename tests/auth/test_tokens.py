@@ -7,7 +7,7 @@ import pytest
 
 from freezegun import freeze_time
 
-from todolist.auth.tokens import check_token, generate_token
+from todolist.auth.tokens import check_token, generate_token, SIGNATURE_ALG
 
 
 FAKE_JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.UURXWQ_jcg5V8OmdeyA6quk7-9HMNntUmm4JWsiS-0U"
@@ -31,7 +31,9 @@ def test_generate_token():
         "iat": datetime(2012, 1, 14, 12, 0, 1),
     }
 
-    jwt_encode_mock.assert_called_with(expected_token_payload, FAKE_SECRET)
+    jwt_encode_mock.assert_called_with(
+        expected_token_payload, FAKE_SECRET, algorithm=SIGNATURE_ALG
+    )
 
 
 def test_check_valid_token():
@@ -48,7 +50,9 @@ def test_check_valid_token():
 
         assert payload == expected_payload
 
-        jwt_decode_mock.assert_called_with(FAKE_JWT_TOKEN, FAKE_SECRET)
+        jwt_decode_mock.assert_called_with(
+            FAKE_JWT_TOKEN, FAKE_SECRET, algorithms=[SIGNATURE_ALG]
+        )
 
 
 def test_check_empty_token():
