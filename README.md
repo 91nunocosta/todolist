@@ -6,7 +6,7 @@ Register
 
 - [x] The user should be able to register with a username and password
 
-    - [ ] store password hash instead of plaintext
+    - [x] store password hash instead of plaintext
 
 - [x] Usernames must be unique across all users
 
@@ -16,7 +16,7 @@ Login
 
 - [x] Should return an access token than can be used for the other endpoints
    
-    - [ ] compare hashed password
+    - [x] compare hashed password
    
     - [x] generate token
 
