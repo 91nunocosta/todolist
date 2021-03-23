@@ -11,10 +11,16 @@ def test_list_tasks(db, client, user, token, another_user):
         {
             "summary": "Test listing tasks.",
             "done": True,
+            "position": 1,
             "_owner": user,
         },
-        {"summary": "Configure Kubernetes.", "done": False, "_owner": user},
-        {"summary": "Configure helm.", "done": False, "_owner": user},
+        {
+            "summary": "Configure Kubernetes.",
+            "done": False,
+            "position": 2,
+            "_owner": user,
+        },
+        {"summary": "Configure helm.", "done": False, "position": 3, "_owner": user},
     ]
 
     db.tasks.insert_many(tasks)
@@ -23,6 +29,7 @@ def test_list_tasks(db, client, user, token, another_user):
         {
             "summary": "Check that he can't see this task, because I'm another user.",
             "done": True,
+            "position": 4,
             "_owner": another_user,
         }
     )
@@ -47,6 +54,7 @@ def test_add_task(client, db, user, token):
     task = {
         "summary": "Test task creation!",
         "done": True,
+        "position": 1,
     }
 
     response = client.post("tasks/", data=task, headers={"Authorization": token})
@@ -77,6 +85,7 @@ def test_update_task(client, db, user, token):
     task = {
         "summary": "Test update!",
         "done": False,
+        "position": 1,
         "_owner": user,
     }
 
@@ -104,6 +113,7 @@ def test_update_task_of_another_user(client, db, user, token, another_user):
     task = {
         "summary": "Test update!",
         "done": False,
+        "position": 1,
         "_owner": another_user,
     }
 
@@ -143,9 +153,11 @@ def test_remove_task(client, db, token):
         {
             "summary": "Test listing tasks.",
             "done": True,
+            "position": 1,
         },
         {
             "summary": "Configure Kubernetes.",
+            "position": 2,
             "done": False,
         },
     ]
@@ -167,6 +179,7 @@ def test_remove_task_of_another_user(client, db, user, token, another_user):
     task = {
         "summary": "Test listing tasks.",
         "done": True,
+        "position": 1,
         "_owner": another_user,
     }
 
@@ -182,9 +195,10 @@ def test_remove_task_of_another_user(client, db, user, token, another_user):
     assert db.tasks.count() == 1
 
 
-def test_unauthorized_remove_task(db, client):
+def test_unauthorized_remove_task(db, user, client):
     task = {
         "summary": "Test delete!",
+        "position": 1,
         "done": False,
     }
 

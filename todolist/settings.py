@@ -22,6 +22,9 @@ DOMAIN = {
                 "type": "boolean",
                 "default": False,
             },
+            "position": {
+                "type": "integer",
+            },
         },
     },
     "accounts": {
