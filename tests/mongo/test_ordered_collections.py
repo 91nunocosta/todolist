@@ -45,6 +45,7 @@ def test_add_position_to_the_end(db_collection, db_items):
 
 
 def test_add_invalid_position(db_collection):
+    db_collection.insert_one({"_id": 1, "position": 1})
     with pytest.raises(ValueError):
         add_position(db_collection, 0)
 
@@ -85,12 +86,14 @@ def test_remove_position_to_the_end(db_collection, db_items):
     ]
     db_collection.insert_many(items)
 
-    remove_position(db_collection, 4)
+    remove_position(db_collection, 3)
 
     assert db_items() == items
 
 
 def test_remove_invalid_position(db_collection):
+    db_collection.insert_one({"_id": 1, "position": 1})
+
     with pytest.raises(ValueError):
         remove_position(db_collection, 0)
 
@@ -243,7 +246,7 @@ def test_check_non_positive_position(db_collection):
         check_position(db_collection, 0)
 
 
-def test_check_non_contiguous_position(db_collection):
+def test_check_position_out_of_bounds(db_collection):
     items = [
         {"_id": 1, "position": 1},
         {"_id": 2, "position": 2},
@@ -254,7 +257,7 @@ def test_check_non_contiguous_position(db_collection):
     db_collection.insert_many(items)
 
     with pytest.raises(ValueError):
-        check_position(db_collection, 6)
+        check_position(db_collection, 5)
 
 
 def test_check_valid_position(db_collection):
