@@ -58,6 +58,31 @@ def remove_position(
         {"position": {"$gt": position}}, {"$inc": {"position": -1}}, multi=True
     )
 
+
+def update_position(
+    collection: Collection, old_position: int, new_position: int
+) -> None:
+    """
+    Updates a position in a MongoDB collection that is ordered by a position field.
+    """
+    check_position(collection, old_position)
+    check_position(collection, new_position)
+
+    if collection.count() < 1:
+        raise ValueError("The collection to update is empty.")
+
+    if old_position < new_position:
+        collection.update_many(
+            {"position": {"$gt": old_position, "$lte": new_position}},
+            {"$inc": {"position": -1}},
+        )
+    if old_position > new_position:
+        collection.update_many(
+            {"position": {"$gte": new_position, "$lt": old_position}},
+            {"$inc": {"position": 1}},
+        )
+
+
 def get_last_position(collection: Collection) -> int:
     last_items = collection.find().sort([("position", pymongo.DESCENDING)]).limit(1)
 

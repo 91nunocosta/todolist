@@ -7,6 +7,7 @@ from todolist.mongo.ordered_collection import (
     get_last_position,
     add_position,
     remove_position,
+    update_position,
 )
 
 
@@ -112,6 +113,111 @@ def test_remove_position_from_the_middle(db_collection, db_items):
     db_collection.insert_many(items)
 
     remove_position(db_collection, 2)
+
+    assert db_items() == prepared_items
+
+
+def test_update_position_to_empty_collection(db_collection):
+    with pytest.raises(ValueError):
+        update_position(db_collection, 1, 1)
+
+
+def test_update_invalid_new_position(db_collection):
+
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+    ]
+
+    db_collection.insert_many(items)
+
+    with pytest.raises(ValueError):
+        update_position(db_collection, 1, 5)
+
+
+def test_update_invalid_old_position(db_collection):
+
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+    ]
+
+    db_collection.insert_many(items)
+
+    with pytest.raises(ValueError):
+        update_position(db_collection, 5, 1)
+
+
+def test_update_to_same_position(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+    ]
+
+    db_collection.insert_many(items)
+
+    update_position(db_collection, 2, 2)
+
+    assert db_items() == items
+
+
+def test_move_down(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+        {"_id": 4, "position": 4},
+        {"_id": 5, "position": 5},
+        {"_id": 6, "position": 6},
+    ]
+    old_position = 2
+    new_position = 5
+    prepared_items = [
+        {"_id": 1, "position": 1},
+        # the position of target item is updated after update_position is executed
+        # the function only updates items that aren't the target
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 2},
+        {"_id": 4, "position": 3},
+        {"_id": 5, "position": 4},
+        {"_id": 6, "position": 6},
+    ]
+
+    db_collection.insert_many(items)
+
+    update_position(db_collection, old_position, new_position)
+
+    assert db_items() == prepared_items
+
+
+def test_move_up(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+        {"_id": 4, "position": 4},
+        {"_id": 5, "position": 5},
+        {"_id": 6, "position": 6},
+    ]
+    old_position = 5
+    new_position = 2
+    prepared_items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 3},
+        {"_id": 3, "position": 4},
+        {"_id": 4, "position": 5},
+        # the position of target item is updated after update_position is executed
+        # the function only updates items that aren't the target
+        {"_id": 5, "position": 5},
+        {"_id": 6, "position": 6},
+    ]
+
+    db_collection.insert_many(items)
+
+    update_position(db_collection, old_position, new_position)
 
     assert db_items() == prepared_items
 
