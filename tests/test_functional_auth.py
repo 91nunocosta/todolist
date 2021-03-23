@@ -27,6 +27,7 @@ def test_authentication_functionality(clear_db, client):
         json={
             "summary": "Do functional test of authorization.",
             "done": True,
+            "position": 1,
         },
         headers={"Authorization": token},
     )
