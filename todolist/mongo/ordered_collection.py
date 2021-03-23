@@ -42,6 +42,22 @@ def add_position(
     )
 
 
+def remove_position(
+    collection: Collection,
+    position: int,
+):
+    """
+    Remove a position from a MongoDB collection that is ordered by a position field.
+
+    All items after the position are shifted (decremented by one) to the left.
+    By other words, the positions of those items are decremented by one.
+    """
+    check_position(collection, position)
+
+    collection.update(
+        {"position": {"$gt": position}}, {"$inc": {"position": -1}}, multi=True
+    )
+
 def get_last_position(collection: Collection) -> int:
     last_items = collection.find().sort([("position", pymongo.DESCENDING)]).limit(1)
 

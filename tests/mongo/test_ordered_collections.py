@@ -6,6 +6,7 @@ from todolist.mongo.ordered_collection import (
     check_position,
     get_last_position,
     add_position,
+    remove_position,
 )
 
 
@@ -65,6 +66,52 @@ def test_add_position_to_the_middle(db_collection, db_items):
     db_collection.insert_many(items)
 
     add_position(db_collection, 3)
+
+    assert db_items() == prepared_items
+
+
+def test_remove_position_to_empty_collection(db_collection):
+    remove_position(db_collection, 1)
+
+    assert db_collection.count() == 0
+
+
+def test_remove_position_to_the_end(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+    ]
+    db_collection.insert_many(items)
+
+    remove_position(db_collection, 4)
+
+    assert db_items() == items
+
+
+def test_remove_invalid_position(db_collection):
+    with pytest.raises(ValueError):
+        remove_position(db_collection, 0)
+
+
+def test_remove_position_from_the_middle(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 3},
+        {"_id": 4, "position": 4},
+    ]
+
+    prepared_items = [
+        {"_id": 1, "position": 1},
+        {"_id": 2, "position": 2},
+        {"_id": 3, "position": 2},
+        {"_id": 4, "position": 3},
+    ]
+
+    db_collection.insert_many(items)
+
+    remove_position(db_collection, 2)
 
     assert db_items() == prepared_items
 
