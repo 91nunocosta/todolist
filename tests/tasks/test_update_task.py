@@ -133,3 +133,25 @@ def test_update_task_in_the_middle(client, db, user, token):
     all_sorted_tasks = db.tasks.find().sort([("position", pymongo.ASCENDING)])
 
     assert items_without_meta(all_sorted_tasks) == items_without_meta(new_tasks)
+
+
+def test_update_task_with_invalid_position(client, db, user, token):
+    db.tasks.drop()
+
+    task = {
+        "summary": "Test update!",
+        "done": False,
+        "position": 1,
+        "_owner": user,
+    }
+
+    _id = db.tasks.insert_one(task).inserted_id
+
+    url = f"tasks/{str(_id)}"
+    data = {
+        "position": 3,
+    }
+
+    response = client.patch(url, data=data, headers={"Authorization": token})
+
+    assert response.status_code == 422

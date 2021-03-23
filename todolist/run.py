@@ -52,7 +52,12 @@ def remove_task_position(task: Dict[str, Any]) -> None:
 
 def update_positions(update, old_task) -> None:
     if "position" in update:
-        update_position(tasks_collection(), old_task["position"], update["position"])
+        try:
+            update_position(
+                tasks_collection(), old_task["position"], update["position"]
+            )
+        except ValueError:
+            abort(422)
 
 
 app.add_url_rule("/login", view_func=login, methods=["POST"])
