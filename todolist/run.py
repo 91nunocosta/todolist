@@ -1,5 +1,5 @@
 from typing import Any, Dict, Iterable
-
+from flask import abort
 from eve import Eve
 
 from eve.auth import TokenAuth
@@ -40,7 +40,10 @@ def tasks_collection():
 
 def add_positions(tasks: Iterable[Dict[str, Any]]) -> None:
     for task in tasks:
-        add_position(tasks_collection(), task["position"])
+        try:
+            add_position(tasks_collection(), task["position"])
+        except ValueError:
+            abort(422)
 
 
 def remove_task_position(task: Dict[str, Any]) -> None:

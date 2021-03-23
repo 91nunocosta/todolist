@@ -93,3 +93,17 @@ def test_add_task_at_the_middle(client, db, user, token):
     all_sorted_tasks = db.tasks.find().sort([("position", pymongo.ASCENDING)])
 
     assert items_without_meta(all_sorted_tasks) == items_without_meta(new_tasks)
+
+
+def test_add_task_at_invalid_position(client, db, user, token):
+    db.tasks.drop()
+
+    task = {
+        "summary": "Test task creation!",
+        "done": True,
+        "position": 2,
+    }
+
+    response = client.post("tasks/", data=task, headers={"Authorization": token})
+
+    assert response.status_code == 422
