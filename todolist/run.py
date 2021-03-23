@@ -7,7 +7,11 @@ from eve.auth import TokenAuth
 from todolist.auth.tokens import check_token
 from todolist.auth.passwords import password_hash
 from todolist.login import login
-from todolist.mongo.ordered_collection import add_position, remove_position
+from todolist.mongo.ordered_collection import (
+    add_position,
+    remove_position,
+    update_position,
+)
 
 
 class JWTTokenAuth(TokenAuth):
@@ -43,6 +47,11 @@ def remove_task_position(task: Dict[str, Any]) -> None:
     remove_position(tasks_collection(), task["position"])
 
 
+def update_positions(update, old_task) -> None:
+    if "position" in update:
+        update_position(tasks_collection(), old_task["position"], update["position"])
+
+
 app.add_url_rule("/login", view_func=login, methods=["POST"])
 
 app.on_insert_accounts += replace_password_with_hash
@@ -50,6 +59,8 @@ app.on_insert_accounts += replace_password_with_hash
 app.on_insert_tasks += add_positions
 
 app.on_delete_item_tasks += remove_task_position
+
+app.on_update_tasks += update_positions
 
 if __name__ == "__main__":
     app.run()

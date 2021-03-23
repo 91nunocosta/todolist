@@ -1,5 +1,6 @@
 from typing import Any, Dict, Iterable, List, Set
 from bson.objectid import ObjectId
+import pymongo
 
 from tests.helpers import items_without_meta
 
@@ -69,3 +70,66 @@ def test_unauthorized_update_task(db, client):
     response = client.patch(url, json={})
 
     assert response.status_code == 401
+
+
+def test_update_task_in_the_middle(client, db, user, token):
+    db.tasks.drop()
+
+    tasks = [
+        {
+            "summary": "Task 1",
+            "done": False,
+            "position": 1,
+            "_owner": user,
+        },
+        {
+            "summary": "Task 2",
+            "done": False,
+            "position": 2,
+            "_owner": user,
+        },
+        {
+            "summary": "Task 3",
+            "done": False,
+            "position": 3,
+            "_owner": user,
+        },
+    ]
+
+    new_tasks = [
+        {
+            "summary": "Task 3",
+            "done": False,
+            "position": 1,
+            "_owner": user,
+        },
+        {
+            "summary": "Task 1",
+            "done": False,
+            "position": 2,
+            "_owner": user,
+        },
+        {
+            "summary": "Task 2",
+            "done": False,
+            "position": 3,
+            "_owner": user,
+        },
+    ]
+
+    db.tasks.insert_one(tasks[0])
+    db.tasks.insert_one(tasks[1])
+    _id = db.tasks.insert_one(tasks[2]).inserted_id
+
+    url = f"tasks/{str(_id)}"
+    data = {
+        "position": "1",
+    }
+
+    response = client.patch(url, data=data, headers={"Authorization": token})
+
+    assert response.status_code == 200
+
+    all_sorted_tasks = db.tasks.find().sort([("position", pymongo.ASCENDING)])
+
+    assert items_without_meta(all_sorted_tasks) == items_without_meta(new_tasks)
