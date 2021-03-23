@@ -7,28 +7,20 @@ from tests.helpers import items_without_meta
 def test_remove_task(client, db, token):
     db.tasks.drop()
 
-    tasks = [
-        {
+    task = {
             "summary": "Test listing tasks.",
             "done": True,
             "position": 1,
-        },
-        {
-            "summary": "Configure Kubernetes.",
-            "position": 2,
-            "done": False,
-        },
-    ]
+    }
 
-    result = db.tasks.insert_many(tasks)
-    some_id = str(result.inserted_ids[0])
+    _id = db.tasks.insert_one(task).inserted_id
 
-    url = f"tasks/{some_id}"
+    url = f"tasks/{str(_id)}"
 
     response = client.delete(url, headers={"Authorization": token})
     assert response.status_code == 204
 
-    assert db.tasks.count()
+    assert db.tasks.count() == 1
 
 
 def test_remove_task_of_another_user(client, db, user, token, another_user):
