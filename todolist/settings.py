@@ -26,6 +26,7 @@ DOMAIN = {
                 "type": "integer",
             },
         },
+        "datasource": {"default_sort": [("position", 1)]},
     },
     "accounts": {
         "resource_methods": ["POST"],
