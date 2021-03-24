@@ -115,7 +115,7 @@ You can find the full [Open API](https://swagger.io/specification/) specificatio
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
 
-Here are some examples from [examples.sh](examples.sh).
+Here are some examples of requests from [examples.sh](examples.sh).
 
 ## Create account
 
