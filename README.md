@@ -1,4 +1,4 @@
-# TODO
+# Done
 
 Create an API for managing a TODO list with the following specification:
 
@@ -36,13 +36,13 @@ TODO List
 
 - [x] The user should be able to update the details of a task in their TODO list
 
-- [X] The user should be able to remove a task from the TODO list
+- [x] The user should be able to remove a task from the TODO list
 
-- [ ] The user should be able to reorder the tasks in the TODO list
+- [x] The user should be able to reorder the tasks in the TODO list
 
-- [ ] A task in the TODO list should be able to handle being moved more than 50 times
+- [x] A task in the TODO list should be able to handle being moved more than 50 times
 
-- [ ] A task in the TODO list should be able to handle being moved to more than one task away from its current position
+- [x] A task in the TODO list should be able to handle being moved to more than one task away from its current position
 
 
 - [x] Return proper errors with corresponding HTTP codes
@@ -51,6 +51,23 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] All endpoints should return JSON responses.
 
+# TODO
+
+- [ ] add docker compose for running locally
+
+- [ ] add instructions for running to the README
+
+- [ ] add API documentation
+
+- [ ] add assumptions to README
+
+- [ ] add discussion of stack and design decisions to the REAME
+
+- [ ] complete next steps to README
+
+- [ ] add tox and code quality analysis
+
+- [ ] improve code quality
 # How to run unit tests locally
 
 To test the application locally you will need:
@@ -84,3 +101,16 @@ For stoping the MongoDB instance (and releasing all the docker resources needed 
 ```
 $ docker-compose -f docker-file-dev.yaml down
 ```
+
+# Next steps
+1. Setup CI/CD.
+
+1. Create Helm chart.
+
+1. Ensure atomicity of task's position changes to the DB.
+
+1. Add JSON responses to invalid position errors.
+
+1. Investigate optimaility of task's position operations.
+
+1. Make test code simpler.
