@@ -182,7 +182,7 @@ To move a task simply change its position value. You can think of the resource t
 
 Only the tasks of the authenticated user are considered. Using the above analogy, each user as an isolated an independent array of tasks.
 
-When the position of a task is updated (or some task is added or removed) the positions of the remaining tasks of the same user are also updated. The positions are always kept contiguous from _1_ to _n_ (as if in an array), where _n_ is the number of tasks of the authenticated user.
+When the position of a task is updated (or some task is added or removed) the positions of the remaining tasks of the same user are also updated. The positions are always kept contiguous from _1_ to _n_ (as if in an array), where _n_ is the number of tasks of the authenticated user. The order of each task in relation with the other tasks is perserved. The only execption is for the task whose position changed.
 
 # How to run unit tests locally
 
