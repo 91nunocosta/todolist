@@ -49,7 +49,8 @@ def add_positions(tasks: Iterable[Dict[str, Any]]) -> None:
 
 
 def remove_task_position(task: Dict[str, Any]) -> None:
-    remove_position(tasks_collection(), task["position"])
+    owner = tasks_collection().find_one({"_id": task["_id"]})["_owner"]
+    remove_position(tasks_collection(), task["position"], query={"_owner": owner})
 
 
 def update_positions(update, old_task) -> None:

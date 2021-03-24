@@ -61,7 +61,7 @@ def test_unauthorized_remove_task(db, user, client):
     assert response.status_code == 401
 
 
-def test_remove_task_from_the_middle(client, db, token):
+def test_remove_task_from_the_middle(client, db, user, token, another_user):
     db.tasks.drop()
 
     tasks = [
@@ -69,16 +69,25 @@ def test_remove_task_from_the_middle(client, db, token):
             "summary": "Test listing tasks.",
             "done": True,
             "position": 1,
+            "_owner": user,
         },
         {
             "summary": "Configure Kubernetes.",
             "position": 2,
             "done": False,
+            "_owner": user,
         },
         {
             "summary": "Test listing something else.",
             "done": True,
             "position": 3,
+            "_owner": user,
+        },
+        {
+            "summary": "Another's user task",
+            "done": True,
+            "position": 3,
+            "_owner": another_user,
         },
     ]
     new_tasks = [
@@ -92,22 +101,24 @@ def test_remove_task_from_the_middle(client, db, token):
             "done": True,
             "position": 2,
         },
+        {
+            "summary": "Another's user task",
+            "done": True,
+            "position": 3,
+        },
     ]
 
-    def create_task(task) -> str:
-        response = client.post("/tasks/", json=task, headers={"Authorization": token})
-        return response.json["_id"]
+    db.tasks.insert_one(tasks[0])
+    _id = db.tasks.insert_one(tasks[1]).inserted_id
+    db.tasks.insert_one(tasks[2])
+    db.tasks.insert_one(tasks[3])
 
-    create_task(tasks[0])
-    _id = create_task(tasks[1])
-    create_task(tasks[2])
-
-    url = f"tasks/{_id}"
+    url = f"tasks/{str(_id)}"
 
     response = client.delete(url, headers={"Authorization": token})
     assert response.status_code == 204
 
-    assert db.tasks.count() == 2
+    assert db.tasks.count() == 3
 
     all_sorted_tasks = db.tasks.find().sort([("position", pymongo.ASCENDING)])
 
