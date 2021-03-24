@@ -107,7 +107,7 @@ $ docker-compose down
 
 # API documentation
 
-You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](/todolist/open-api-spec.json).
+You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](open-api-spec.json).
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
 
