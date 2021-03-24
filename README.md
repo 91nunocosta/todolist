@@ -171,6 +171,16 @@ curl --location --request DELETE 'http://0.0.0.0:5000/tasks/605b9e7052a0e74acae7
 --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI'
 ```
 
+## Reorder tasks
+
+To move a task simply change it’s position value. You can think of the tasks resource as an dynamic array (which is most likely what the front-end would use for holding a list of tasks). The same restrictions apply:
+
+1. The position can’t bes less than the initial position, which in this case is 1.
+
+1. The position can’t be larger than the largest position.
+
+Only the tasks of the authenticated user are considered. Using the above analogy, each user as an isolated an independent array of tasks. 
+
 # How to run unit tests locally
 
 To test the application locally you will need:
@@ -216,10 +226,10 @@ $ docker-compose -f docker-file-dev.yaml down
 
 1. Create Helm chart.
 
-1. Ensure atomicity of task's position changes to the DB.
+1. Ensure atomicity of task’s position changes to the DB.
 
 1. Add JSON responses to invalid position errors.
 
-1. Investigate optimaility of task's position operations.
+1. Investigate optimaility of task’s position operations.
 
 1. Make test code simpler.
