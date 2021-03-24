@@ -72,12 +72,6 @@ def test_add_position_to_the_middle(db_collection, db_items):
     assert db_items() == prepared_items
 
 
-def test_remove_position_to_empty_collection(db_collection):
-    remove_position(db_collection, 1)
-
-    assert db_collection.count() == 0
-
-
 def test_remove_position_to_the_end(db_collection, db_items):
     items = [
         {"_id": 1, "position": 1},

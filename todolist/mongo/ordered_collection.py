@@ -35,14 +35,14 @@ def add_position(
     By other words, the positions of those items are incremented by one.
     No item is actually added.
     """
-    if collection.count() < 1:
-        return
-
     if position <= 0:
         raise ValueError("Position should be greather than 0.")
 
     if position > get_last_position(collection) + 1:
         raise ValueError("Position should be contiguous to the existing position.")
+
+    if collection.count() < 1:
+        return
 
     collection.update(
         {"position": {"$gte": position}}, {"$inc": {"position": 1}}, multi=True
@@ -59,9 +59,6 @@ def remove_position(
     All items after the position are shifted (decremented by one) to the left.
     By other words, the positions of those items are decremented by one.
     """
-    if collection.count() < 1:
-        return
-
     check_position(collection, position)
 
     collection.update(
