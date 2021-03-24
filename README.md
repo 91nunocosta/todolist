@@ -57,7 +57,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] add instructions for running to the README
 
-- [ ] add API documentation
+- [x] add API documentation
 
 - [ ] add assumptions to README
 
@@ -99,17 +99,77 @@ Do your requests:
 ```bash
 $ curl "http://0.0.0.0:5000/api-docs"
 ```
+By the way, this request returns you the Open API spec mentioned in the next section.
+
+You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configurtion also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning.  
 
 Once you are done, stop the docker containers running:
 ```
 $ docker-compose down
 ``` 
 
-# API documentation
+# API
 
 You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](open-api-spec.json).
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
+
+Here are some examples from [examples.sh](examples.sh).
+
+## Create account
+
+```bash
+curl --location --request POST 'http://0.0.0.0:5000/accounts' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "91nunocosta@gmail.com",
+    "password": "unsercurepassword"
+}'
+```
+
+##  Login
+```bash
+curl --location --request POST 'http://0.0.0.0:5000/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "91nunocosta@gmail.com",
+    "password": "unsercurepassword"
+}'
+```
+
+## Create task
+```bash
+curl --location --request POST 'http://0.0.0.0:5000/tasks' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI' \
+--data-raw '{
+    "summary": "Check that task can be created.",
+    "done": false,
+    "position": 1
+}'
+```
+
+## List tasks
+```bash
+curl --location --request GET 'http://0.0.0.0:5000/tasks' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI'
+```
+
+## Update task
+```bash
+curl --location --request PATCH 'http://0.0.0.0:5000/tasks/605b9e7052a0e74acae75fac' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI' \
+--data-raw '{
+    "done": true
+}'
+```
+
+## Delete task
+```bash
+curl --location --request DELETE 'http://0.0.0.0:5000/tasks/605b9e7052a0e74acae75fac' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE2MTY2MTY5NjN9.tMQoy_6ROA_sxWR1exWVeRZZZFR4qvMbO2Szos_XIMI'
+```
 
 # How to run unit tests locally
 
