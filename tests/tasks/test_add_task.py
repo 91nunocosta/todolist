@@ -36,7 +36,7 @@ def test_unauthorized_add_task(client):
     assert response.status_code == 401
 
 
-def test_add_task_at_the_middle(client, db, user, token):
+def test_add_task_at_the_middle(client, db, user, token, another_user):
     db.tasks.drop()
 
     tasks = [
@@ -44,16 +44,25 @@ def test_add_task_at_the_middle(client, db, user, token):
             "summary": "Some previous task.",
             "position": 1,
             "done": True,
+            "_owner": user,
         },
         {
             "summary": "Other task.",
             "position": 2,
             "done": True,
+            "_owner": user,
         },
         {
             "summary": "Yet another task.",
             "position": 3,
             "done": False,
+            "_owner": user,
+        },
+        {
+            "summary": "Another user's task.",
+            "position": 4,
+            "done": False,
+            "_owner": another_user,
         },
     ]
     new_task = {
@@ -81,6 +90,12 @@ def test_add_task_at_the_middle(client, db, user, token):
             "summary": "Yet another task.",
             "position": 4,
             "done": False,
+        },
+        {
+            "summary": "Another user's task.",
+            "position": 4,
+            "done": False,
+            "_owner": another_user,
         },
     ]
 

@@ -41,7 +41,9 @@ def tasks_collection():
 def add_positions(tasks: Iterable[Dict[str, Any]]) -> None:
     for task in tasks:
         try:
-            add_position(tasks_collection(), task["position"])
+            add_position(
+                tasks_collection(), task["position"], query={"_owner": task["_owner"]}
+            )
         except ValueError:
             abort(422)
 
