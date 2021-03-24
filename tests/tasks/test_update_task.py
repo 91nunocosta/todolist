@@ -72,7 +72,7 @@ def test_unauthorized_update_task(db, client):
     assert response.status_code == 401
 
 
-def test_update_task_in_the_middle(client, db, user, token):
+def test_update_task_in_the_middle(client, db, user, token, another_user):
     db.tasks.drop()
 
     tasks = [
@@ -87,6 +87,12 @@ def test_update_task_in_the_middle(client, db, user, token):
             "done": False,
             "position": 2,
             "_owner": user,
+        },
+        {
+            "summary": "Another user's task",
+            "done": False,
+            "position": 2,
+            "_owner": another_user,
         },
         {
             "summary": "Task 3",
@@ -110,6 +116,12 @@ def test_update_task_in_the_middle(client, db, user, token):
             "_owner": user,
         },
         {
+            "summary": "Another user's task",
+            "done": False,
+            "position": 2,
+            "_owner": another_user,
+        },
+        {
             "summary": "Task 2",
             "done": False,
             "position": 3,
@@ -119,7 +131,8 @@ def test_update_task_in_the_middle(client, db, user, token):
 
     db.tasks.insert_one(tasks[0])
     db.tasks.insert_one(tasks[1])
-    _id = db.tasks.insert_one(tasks[2]).inserted_id
+    db.tasks.insert_one(tasks[2])
+    _id = db.tasks.insert_one(tasks[3]).inserted_id
 
     url = f"tasks/{str(_id)}"
     data = {

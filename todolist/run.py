@@ -56,8 +56,12 @@ def remove_task_position(task: Dict[str, Any]) -> None:
 def update_positions(update, old_task) -> None:
     if "position" in update:
         try:
+            owner = tasks_collection().find_one({"_id": old_task["_id"]})["_owner"]
             update_position(
-                tasks_collection(), old_task["position"], update["position"]
+                tasks_collection(),
+                old_task["position"],
+                update["position"],
+                query={"_owner": owner},
             )
         except ValueError:
             abort(422)
