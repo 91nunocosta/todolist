@@ -235,6 +235,18 @@ def test_get_last_position(db_collection):
     assert get_last_position(db_collection) == 4
 
 
+def test_get_last_position_with_filter(db_collection):
+    items = [
+        {"_id": 1, "position": 1, "option": 1},
+        {"_id": 2, "position": 2, "option": 1},
+        {"_id": 3, "position": 3, "option": 1},
+        {"_id": 4, "position": 4, "option": 2},
+    ]
+    db_collection.insert_many(items)
+
+    assert get_last_position(db_collection, query={"option": 1}) == 3
+
+
 def test_check_non_positive_position(db_collection):
     with pytest.raises(ValueError):
         check_position(db_collection, 0)

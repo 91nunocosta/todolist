@@ -90,8 +90,10 @@ def update_position(
         )
 
 
-def get_last_position(collection: Collection) -> int:
-    last_items = collection.find().sort([("position", pymongo.DESCENDING)]).limit(1)
+def get_last_position(collection: Collection, query: Dict[str, Any] = {}) -> int:
+    last_items = (
+        collection.find(query).sort([("position", pymongo.DESCENDING)]).limit(1)
+    )
 
     if last_items.count() < 1:
         return 0
