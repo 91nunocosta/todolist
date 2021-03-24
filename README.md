@@ -259,8 +259,6 @@ The operation of reordering tasks is the more challenging model with the CRUD in
 
 1. Manage expiration of authorization tokens.
 
-1. Add keyword `Bearer` to the authorization tokens.
-
 1. Setup CI/CD.
 
 1. Create Helm chart.
