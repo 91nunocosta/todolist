@@ -12,9 +12,9 @@ Register
 
 Login
 
-- [x] The user should be able to login with the credentials they provided in the register endpoint
+- [x] The user should be able to log in with the credentials they provided in the register endpoint
 
-- [x] Should return an access token than can be used for the other endpoints
+- [x] Should return an access token that can be used for the other endpoints
    
     - [x] compare hashed password
    
@@ -61,7 +61,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [ ] add assumptions to README
 
-- [ ] add discussion of stack and design decisions to the REAME
+- [ ] add discussion of stack and design decisions to the README
 
 - [ ] complete next steps to README
 
@@ -101,7 +101,7 @@ $ curl "http://0.0.0.0:5000/api-docs"
 ```
 By the way, this request returns you the Open API spec mentioned in the next section.
 
-You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configurtion also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning. Note that docker-compose is not intented for production. A different secret (not stored in git) would be used in production.
+You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configuration also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning. Note that docker-compose is not intended for production. A different secret (not stored in git) would be used in production.
 
 If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](postman_collection) and try the requests there.
 
@@ -175,9 +175,9 @@ curl --location --request DELETE 'http://0.0.0.0:5000/tasks/605b9e7052a0e74acae7
 
 ## Reorder tasks
 
-To move a task simply change it’s position value. You can think of the tasks resource as an dynamic array (which is most likely what the front-end would use for holding a list of tasks). The same restrictions apply:
+To move a task simply change its position value. You can think of the resource tasks as a dynamic array (which is most likely what the front-end would use for holding a list of tasks). The same restrictions apply:
 
-1. The position can’t bes less than the initial position, which in this case is 1.
+1. The position can’t be less than the initial position, which in this case is 1.
 
 1. The position can’t be larger than the largest position.
 
@@ -191,7 +191,7 @@ To test the application locally you will need:
 - [docker](https://docs.docker.com/engine/install/)
 - [docker-compose](https://docs.docker.com/compose/install/)
 
-[Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies in a auto-contained [virtual environment](https://docs.python.org/3/tutorial/venv.html).
+[Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies in an auto-contained [virtual environment](https://docs.python.org/3/tutorial/venv.html).
 To install it, run:
 ```
 $ pip install poetry
@@ -212,7 +212,7 @@ Finally, you can run the tests:
 $ poetry run pytest
 ```
 
-For stoping the MongoDB instance (and releasing all the docker resources needed for it), run:
+For stopping the MongoDB instance (and releasing all the docker resources needed for it), run:
 ```
 $ docker-compose -f docker-file-dev.yaml down
 ```
@@ -232,6 +232,6 @@ $ docker-compose -f docker-file-dev.yaml down
 
 1. Add JSON responses to invalid position errors.
 
-1. Investigate optimaility of task’s position operations.
+1. Investigate if task’s position operations implementation is optimal.
 
 1. Make test code simpler.
