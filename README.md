@@ -140,6 +140,8 @@ $ docker-compose -f docker-file-dev.yaml down
 ```
 
 # Next steps
+1. Configure HTTPS.
+
 1. Setup CI/CD.
 
 1. Create Helm chart.
