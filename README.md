@@ -105,6 +105,12 @@ Once you are done, stop the docker containers running:
 $ docker-compose down
 ``` 
 
+# API documentation
+
+You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](/todolist/open-api-spec.json).
+
+It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
+
 # How to run unit tests locally
 
 To test the application locally you will need:
@@ -141,6 +147,10 @@ $ docker-compose -f docker-file-dev.yaml down
 
 # Next steps
 1. Configure HTTPS.
+
+1. Manage expiration of authorization tokens.
+
+1. Add keyword `Bearer` to the authorization tokens.
 
 1. Setup CI/CD.
 
