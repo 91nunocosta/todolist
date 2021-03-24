@@ -51,6 +51,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] All endpoints should return JSON responses.
 
+
 # TODO
 
 - [x] add docker compose for running locally
@@ -59,11 +60,9 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] add API documentation
 
-- [ ] add assumptions to README
-
 - [ ] add discussion of stack and design decisions to the README
 
-- [ ] complete next steps to README
+- [ ] complete improvments on README
 
 - [ ] add tox and code quality analysis
 
@@ -181,7 +180,9 @@ To move a task simply change its position value. You can think of the resource t
 
 1. The position can’t be larger than the largest position.
 
-Only the tasks of the authenticated user are considered. Using the above analogy, each user as an isolated an independent array of tasks. 
+Only the tasks of the authenticated user are considered. Using the above analogy, each user as an isolated an independent array of tasks.
+
+When the position of a task is updated (or some task is added or removed) the positions of the remaining tasks of the same user are also updated. The positions are always kept contiguous from _1_ to _n_ (as if in an array), where _n_ is the number of tasks of the authenticated user.
 
 # How to run unit tests locally
 
@@ -217,7 +218,43 @@ For stopping the MongoDB instance (and releasing all the docker resources needed
 $ docker-compose -f docker-file-dev.yaml down
 ```
 
+# Discussion
+
+Here is some explanation for my choices in this exercise.
+
+## API design
+
+I chose to follow [REST architectural style](https://en.wikipedia.org/wiki/Representational_state_transfer). REST is suitable for the CRUD (Create, Read, Update, Delete) interface described in the requirements, and it positively affects:
+
+* _Performance_ in component interactions.
+
+* _Scalability_ — allowing the support of large numbers of components and interactions among components.
+
+* _Simplicity_ of a uniform interface.
+
+* _Modifiability_ of components to meet changing needs (even while the application is running).
+
+* _Visibility_ of communication between components by service agents.
+
+* _Portability_ of components by moving program code with the data.
+
+* _Reliability_ in the resistance to failure at the system level in the presence of failures within components, connectors, or data.
+
+The operation of reordering tasks is the more challenging model with the CRUD interface. But if we see the position of a task as part of its status, then reordering is also an update operation. This approach has some important benefits:
+
+1. The uniform interface is preserved. It avoids adding an extra operation whose semantics would be ad-hoc.
+
+1. Adding, removing and moving items with positions has a well-known semantics: the same as the arrays.
+
+1. The front-end can add or remove tasks at any position with a single request. When a task is moved, the front-end only need to track how its position changed. The front-end doesn't need to care about any other task.
+
+## Implementation
+
+## Stack
+
+
 # Next steps
+
 1. Configure HTTPS.
 
 1. Manage expiration of authorization tokens.
