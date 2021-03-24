@@ -7,7 +7,9 @@ import pymongo
 from pymongo.collection import Collection
 
 
-def check_position(collection: Collection, position: int) -> None:
+def check_position(
+    collection: Collection, position: int, query: Dict[str, Any] = {}
+) -> None:
     """
     Check if a position is valid in a given collections.
 
@@ -20,7 +22,7 @@ def check_position(collection: Collection, position: int) -> None:
     if position <= 0:
         raise ValueError("Position should be greather than 0.")
 
-    if position > get_last_position(collection):
+    if position > get_last_position(collection, query=query):
         raise ValueError("Position should be contiguous to the existing position.")
 
 
