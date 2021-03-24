@@ -1,9 +1,11 @@
 from typing import Any, Dict, Iterable
 from flask import abort
 from eve import Eve
-
 from eve.auth import TokenAuth
 
+from eve_swagger import get_swagger_blueprint
+
+from todolist import __version__
 from todolist.auth.tokens import check_token
 from todolist.auth.passwords import password_hash
 from todolist.login import login
@@ -76,6 +78,19 @@ app.on_insert_tasks += add_positions
 app.on_delete_item_tasks += remove_task_position
 
 app.on_update_tasks += update_positions
+
+
+swagger = get_swagger_blueprint()
+app.register_blueprint(swagger)
+
+app.config["SWAGGER_INFO"] = {
+    "title": "Todolist",
+    "version": __version__,
+    "description": "an API for managing tasks",
+    "contact": {"name": "Nuno Costa"},
+    "schemes": ["http"],
+}
+
 
 if __name__ == "__main__":
     app.run()
