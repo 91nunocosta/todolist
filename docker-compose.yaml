@@ -7,6 +7,12 @@ services:
       - "5000:5000"
     depends_on:
       - database
+    links:
+      - database
+    environment:
+      - MONGO_HOST=database
 
   database:
     image: mongo
+    ports:
+      - "27017:27017"

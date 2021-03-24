@@ -1,3 +1,5 @@
+import os
+
 # The next setting disables concurrency control (https://docs.python-eve.org/en/stable/features.html#concurrency).
 # Concurrency control ensures that two clients requesting a change to a same item don't interfer with each other.
 # The clients must prove it knows the latest version of the item.
@@ -6,7 +8,9 @@
 
 # I chose to disable this to make it easier to try out the API.
 # In a real-life scenario I would't do so.
-SERVER_NAME = "0.0.0.0:5000"
+SERVER_NAME = os.environ.get("SERVER_NAME", "0.0.0.0:5000")
+MONGO_HOST = os.environ.get("MONGO_HOST", "localhost")
+
 
 IF_MATCH = False
 
