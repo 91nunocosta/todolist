@@ -1,0 +1,455 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Todolist",
+        "description": "an API for managing tasks",
+        "contact": {
+            "name": "Nuno Costa"
+        },
+        "version": "0.1.0"
+    },
+    "servers": [
+        {
+            "url": "https://0.0.0.0:5000"
+        }
+    ],
+    "paths": {
+        "/tasks": {
+            "get": {
+                "summary": "Retrieves one or more tasks",
+                "responses": {
+                    "200": {
+                        "description": "An array of tasks",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Task"
+                                            }
+                                        },
+                                        "_meta": {
+                                            "$ref": "#/components/schemas/respone_metadata"
+                                        },
+                                        "_links": {
+                                            "$ref": "#/components/schemas/respone_links"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/query__where"
+                    },
+                    {
+                        "$ref": "#/components/parameters/query__projections"
+                    },
+                    {
+                        "$ref": "#/components/parameters/query__sort"
+                    },
+                    {
+                        "$ref": "#/components/parameters/query__page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/query__max_results"
+                    }
+                ],
+                "operationId": "gettasks",
+                "tags": [
+                    "Task"
+                ]
+            },
+            "post": {
+                "summary": "Stores one or more tasks.",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Task"
+                },
+                "responses": {
+                    "201": {
+                        "description": "operation has been successful"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "parameters": [],
+                "operationId": "posttasks",
+                "tags": [
+                    "Task"
+                ]
+            }
+        },
+        "/tasks/{taskId}": {
+            "patch": {
+                "summary": "Updates a Task document",
+                "responses": {
+                    "200": {
+                        "description": "Task document updated successfully"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Task"
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Task__id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/If-Match"
+                    }
+                ],
+                "operationId": "patchTaskItem",
+                "tags": [
+                    "Task"
+                ]
+            },
+            "delete": {
+                "summary": "Deletes a Task document",
+                "responses": {
+                    "204": {
+                        "description": "Task document deleted successfully"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Task__id"
+                    },
+                    {
+                        "$ref": "#/components/parameters/If-Match"
+                    }
+                ],
+                "operationId": "deleteTaskItem",
+                "tags": [
+                    "Task"
+                ]
+            }
+        },
+        "/accounts": {
+            "post": {
+                "summary": "Stores one or more accounts.",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/Account"
+                },
+                "responses": {
+                    "201": {
+                        "description": "operation has been successful"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "parameters": [],
+                "operationId": "postaccounts",
+                "tags": [
+                    "Account"
+                ]
+            }
+        },
+        "/accounts/{accountId}": {
+            "get": {
+                "summary": "Retrieves a Account document",
+                "responses": {
+                    "200": {
+                        "description": "Account document fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Account"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/error"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Account__id"
+                    }
+                ],
+                "operationId": "getAccountItem",
+                "tags": [
+                    "Account"
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "summary": {
+                        "type": "string"
+                    },
+                    "done": {
+                        "default": false,
+                        "type": "boolean"
+                    },
+                    "position": {
+                        "type": "integer"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "format": "objectid"
+                    }
+                },
+                "required": [
+                    "summary"
+                ]
+            },
+            "Account": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "format": "objectid"
+                    }
+                },
+                "required": [
+                    "username",
+                    "password"
+                ]
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "_status": {
+                        "type": "string",
+                        "example": "OK"
+                    },
+                    "_error": {
+                        "type": "object",
+                        "properties": {
+                            "code": {
+                                "type": "integer"
+                            },
+                            "message": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "_status",
+                    "_error"
+                ]
+            },
+            "respone_metadata": {
+                "type": "object",
+                "properties": {
+                    "page": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "integer"
+                    },
+                    "max_results": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "respone_links": {
+                "type": "object",
+                "properties": {
+                    "parent": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            "href": {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        }
+                    },
+                    "self": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            "href": {
+                                "type": "string",
+                                "format": "uri"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "error": {
+                "description": "An error message",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "Task__id": {
+                "in": "path",
+                "name": "taskId",
+                "required": true,
+                "description": "",
+                "example": "",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "Account__id": {
+                "in": "path",
+                "name": "accountId",
+                "required": true,
+                "description": "",
+                "example": "",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "If-Match": {
+                "in": "header",
+                "name": "If-Match",
+                "description": "Current value of the _etag field",
+                "required": false,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "query__where": {
+                "in": "query",
+                "name": "where",
+                "description": "the filters query parameter (ex.: {\"number\": 10})",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "query__projections": {
+                "in": "query",
+                "name": "projection",
+                "description": "the projections query parameter (ex.: {\"name\": 1})",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "query__sort": {
+                "in": "query",
+                "name": "sort",
+                "description": "the sort query parameter (ex.: \"city,-lastname\")",
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "query__page": {
+                "in": "query",
+                "name": "page",
+                "description": "the pages query parameter",
+                "schema": {
+                    "type": "integer",
+                    "example": 1
+                }
+            },
+            "query__max_results": {
+                "in": "query",
+                "name": "max_results",
+                "description": "the max results query parameter",
+                "schema": {
+                    "type": "integer",
+                    "example": 25
+                }
+            }
+        },
+        "examples": {
+            "Task": {
+                "summary": "An example {0} document.",
+                "description": "An example for Task documents request bodies. Used in POST, PUT, PATCH methods."
+            },
+            "Account": {
+                "summary": "An example {0} document.",
+                "description": "An example for Account documents request bodies. Used in POST, PUT, PATCH methods."
+            }
+        },
+        "requestBodies": {
+            "Task": {
+                "description": "A Task or list of Task documents",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Task"
+                        },
+                        "examples": {
+                            "Task": {
+                                "$ref": "#/components/examples/Task"
+                            }
+                        }
+                    }
+                }
+            },
+            "Account": {
+                "description": "A Account or list of Account documents",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Account"
+                        },
+                        "examples": {
+                            "Account": {
+                                "$ref": "#/components/examples/Account"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Task"
+        },
+        {
+            "name": "Account"
+        }
+    ]
+}
