@@ -6,6 +6,8 @@
 
 # I chose to disable this to make it easier to try out the API.
 # In a real-life scenario I would't do so.
+SERVER_NAME = "0.0.0.0:5000"
+
 IF_MATCH = False
 
 DOMAIN = {

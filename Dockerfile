@@ -13,4 +13,10 @@ RUN poetry config virtualenvs.create false && \
 
 COPY ./todolist todolist
 
-ENTRYPOINT ["poetry", "run", "python", "todolist/run.py"]
+RUN poetry build
+
+RUN poetry install
+
+WORKDIR /app/todolist
+
+ENTRYPOINT ["poetry", "run", "python", "run.py", "--host=0.0.0.0", "--port=5000"]
