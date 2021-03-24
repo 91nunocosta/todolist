@@ -164,7 +164,7 @@ def test_remove_position_from_the_middle_with_filter(db_collection, db_items):
 
 def test_update_position_to_empty_collection(db_collection):
     with pytest.raises(ValueError):
-        update_position(db_collection, 1, 1)
+        update_position(db_collection, 1, 2)
 
 
 def test_update_invalid_new_position(db_collection):
@@ -263,6 +263,37 @@ def test_move_up(db_collection, db_items):
     db_collection.insert_many(items)
 
     update_position(db_collection, old_position, new_position)
+
+    assert db_items() == prepared_items
+
+
+def test_move_down_with_filter(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1, "option": 1},
+        {"_id": 2, "position": 2, "option": 1},
+        {"_id": 7, "position": 3, "option": 2},
+        {"_id": 3, "position": 3, "option": 1},
+        {"_id": 4, "position": 4, "option": 1},
+        {"_id": 5, "position": 5, "option": 1},
+        {"_id": 6, "position": 6, "option": 1},
+    ]
+    old_position = 2
+    new_position = 5
+    prepared_items = [
+        {"_id": 1, "position": 1, "option": 1},
+        # the position of target item is updated after update_position is executed
+        # the function only updates items that aren't the target
+        {"_id": 2, "position": 2, "option": 1},
+        {"_id": 3, "position": 2, "option": 1},
+        {"_id": 7, "position": 3, "option": 2},
+        {"_id": 4, "position": 3, "option": 1},
+        {"_id": 5, "position": 4, "option": 1},
+        {"_id": 6, "position": 6, "option": 1},
+    ]
+
+    db_collection.insert_many(items)
+
+    update_position(db_collection, old_position, new_position, query={"option": 1})
 
     assert db_items() == prepared_items
 
