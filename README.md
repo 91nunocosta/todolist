@@ -97,7 +97,7 @@ $ docker-compose up
 
 Do your requests:
 ```bash
-$ curl "0.0.0.0:5000"
+$ curl "http://0.0.0.0:5000/api-docs"
 ```
 
 Once you are done, stop the docker containers running:
