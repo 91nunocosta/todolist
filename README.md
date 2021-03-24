@@ -55,7 +55,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] add docker compose for running locally
 
-- [ ] add instructions for running to the README
+- [x] add instructions for running to the README
 
 - [ ] add API documentation
 
@@ -70,6 +70,40 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 - [ ] improve code quality
 
 - [ ] improve docker
+
+
+# How to run locally
+
+To run the application locally you will need:
+- [docker](https://docs.docker.com/engine/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
+
+Clone this repository to some directory of your choice:
+
+```bash
+$ git clone git@github.com:91nunocosta/todolist.git
+```
+
+Go inside the project:
+
+```bash
+$ cd todolist
+```
+
+Run docker-compose to build and run the required docker containers:
+```bash
+$ docker-compose up
+```
+
+Do your requests:
+```bash
+$ curl "0.0.0.0:5000"
+```
+
+Once you are done, stop the docker containers running:
+```
+$ docker-compose down
+``` 
 
 # How to run unit tests locally
 
