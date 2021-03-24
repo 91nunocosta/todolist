@@ -53,7 +53,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 # TODO
 
-- [ ] add docker compose for running locally
+- [x] add docker compose for running locally
 
 - [ ] add instructions for running to the README
 
@@ -68,6 +68,9 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 - [ ] add tox and code quality analysis
 
 - [ ] improve code quality
+
+- [ ] improve docker
+
 # How to run unit tests locally
 
 To test the application locally you will need:
