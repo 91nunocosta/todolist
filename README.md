@@ -101,7 +101,7 @@ $ curl "http://0.0.0.0:5000/api-docs"
 ```
 By the way, this request returns you the Open API spec mentioned in the next section.
 
-You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configurtion also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning.  
+You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configurtion also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning. Note that docker-compose is not intented for production. A different secret (not stored in git) would be used in production.
 
 Once you are done, stop the docker containers running:
 ```
