@@ -29,6 +29,7 @@ def check_position(
 def add_position(
     collection: Collection,
     position: int,
+    query: Dict[str, Any] = {},
 ) -> None:
     """
     Add a position to a MongoDB collection that is ordered by a position field.
@@ -46,9 +47,9 @@ def add_position(
     if collection.count() < 1:
         return
 
-    collection.update(
-        {"position": {"$gte": position}}, {"$inc": {"position": 1}}, multi=True
-    )
+    query.update({"position": {"$gte": position}})
+
+    collection.update(query, {"$inc": {"position": 1}}, multi=True)
 
 
 def remove_position(

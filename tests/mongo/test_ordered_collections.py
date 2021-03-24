@@ -72,6 +72,30 @@ def test_add_position_to_the_middle(db_collection, db_items):
     assert db_items() == prepared_items
 
 
+def test_add_position_to_the_middle_with_filter(db_collection, db_items):
+    items = [
+        {"_id": 1, "position": 1, "option": 1},
+        {"_id": 2, "position": 2, "option": 1},
+        {"_id": 3, "position": 3, "option": 1},
+        {"_id": 4, "position": 4, "option": 1},
+        {"_id": 5, "position": 5, "option": 2},
+    ]
+
+    prepared_items = [
+        {"_id": 1, "position": 1, "option": 1},
+        {"_id": 2, "position": 2, "option": 1},
+        {"_id": 3, "position": 4, "option": 1},
+        {"_id": 4, "position": 5, "option": 1},
+        {"_id": 5, "position": 5, "option": 2},
+    ]
+
+    db_collection.insert_many(items)
+
+    add_position(db_collection, 3, query={"option": 1})
+
+    assert db_items() == prepared_items
+
+
 def test_remove_position_to_the_end(db_collection, db_items):
     items = [
         {"_id": 1, "position": 1},
