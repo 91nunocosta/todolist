@@ -55,6 +55,7 @@ def add_position(
 def remove_position(
     collection: Collection,
     position: int,
+    query: Dict[str, Any] = {},
 ):
     """
     Remove a position from a MongoDB collection that is ordered by a position field.
@@ -64,9 +65,9 @@ def remove_position(
     """
     check_position(collection, position)
 
-    collection.update(
-        {"position": {"$gt": position}}, {"$inc": {"position": -1}}, multi=True
-    )
+    query.update({"position": {"$gt": position}})
+
+    collection.update(query, {"$inc": {"position": -1}}, multi=True)
 
 
 def update_position(
