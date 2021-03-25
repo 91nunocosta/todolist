@@ -11,7 +11,7 @@ def test_add_account(db, client):
     fake_hash = "fake_token"
     password_hash_mock = MagicMock(return_value=fake_hash)
 
-    with patch("todolist.run.password_hash", password_hash_mock):
+    with patch("todolist.app.password_hash", password_hash_mock):
         response = client.post("/accounts", json=account)
 
     assert response.status_code == 201

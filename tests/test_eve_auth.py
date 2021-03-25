@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 
-from todolist.run import replace_password_with_hash
+from todolist.app import replace_password_with_hash
 
 
 def test_hash_password():
@@ -11,7 +11,7 @@ def test_hash_password():
 
     password_hash_mock = MagicMock(return_value=fake_hash)
 
-    with patch("todolist.run.password_hash", password_hash_mock):
+    with patch("todolist.app.password_hash", password_hash_mock):
         replace_password_with_hash([account])
 
     password_hash_mock.assert_called_with(password)

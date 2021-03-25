@@ -1,5 +1,5 @@
 import json
-from todolist.run import app
+from todolist.app import app
 
 DOC_FILE = "open-api-spec.json"
 

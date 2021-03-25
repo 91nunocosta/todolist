@@ -2,7 +2,7 @@ from unittest.mock import patch
 import pytest
 
 
-from todolist.run import app
+from todolist.app import app
 
 
 @pytest.fixture
@@ -37,7 +37,7 @@ def token(user):
     # it is finished when the test stops
     token_payload = {"sub": user}
 
-    patcher = patch("todolist.run.check_token", lambda _: token_payload)
+    patcher = patch("todolist.app.check_token", lambda _: token_payload)
 
     patcher.start()
 

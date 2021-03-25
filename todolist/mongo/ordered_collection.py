@@ -85,9 +85,6 @@ def update_position(
     check_position(collection, old_position)
     check_position(collection, new_position)
 
-    if collection.count() < 1:
-        raise ValueError("The collection to update is empty.")
-
     if old_position < new_position:
         limits = {"$gt": old_position, "$lte": new_position}
         increment = -1
