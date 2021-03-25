@@ -71,7 +71,7 @@ $ cd todolist
 
 Run docker-compose to build and run the required docker containers:
 ```bash
-$ docker-compose up
+$ docker-compose up -d
 ```
 
 Do your requests:
