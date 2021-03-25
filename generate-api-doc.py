@@ -1,12 +1,12 @@
 import json
 
-from todolist.app import app
+from todolist.app import create_app
 
 DOC_FILE = "open-api-spec.json"
 
 
 def get_open_api_spec():
-    client = app.test_client()
+    client = create_app().test_client()
 
     response = client.get("/api-docs")
 

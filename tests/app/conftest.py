@@ -2,16 +2,21 @@ from unittest.mock import patch
 
 import pytest
 
-from todolist.app import app
+from todolist.app import create_app
 
 
 @pytest.fixture
-def client():
+def app():
+    return create_app()
+
+
+@pytest.fixture
+def client(app):
     return app.test_client()
 
 
 @pytest.fixture
-def db():
+def db(app):
     with app.app_context():
         return app.data.driver.db
 
