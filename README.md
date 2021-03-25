@@ -60,7 +60,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] add API documentation
 
-- [ ] add discussion of stack and design decisions to the README
+- [x] add discussion of stack and design decisions to the README
 
 - [ ] complete improvments on README
 
@@ -240,7 +240,7 @@ I chose to follow [REST architectural style](https://en.wikipedia.org/wiki/Repre
 
 * _Reliability_ in the resistance to failure at the system level in the presence of failures within components, connectors, or data.
 
-The operation of reordering tasks is the more challenging model with the CRUD interface. But if we see the position of a task as part of its status, then reordering is also an update operation. This approach has some important benefits:
+The operation of reordering tasks is the more challenging to model with the CRUD interface. But if we see the position of a task as part of its status, then reordering is also an update operation. This approach has some important benefits:
 
 1. The uniform interface is preserved. It avoids adding an extra operation whose semantics would be ad-hoc.
 
