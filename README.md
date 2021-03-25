@@ -298,7 +298,7 @@ POST /tasks
 
 In a MonoDB both items can be created in a collection _tasks_ with exactly the same structure they have in the requests. In this way, there is no need to spend extra time thinking about the DB schema: it is equal to the API schema. There may be cases where the mapping can't be one-to-one. But many times it can. That is the case in the API developed here.
 
-It's possible to argue that the same could be achieved in relational DB as well. The nested `custom_fields` document could be stored as json field. But Mongo can query for any field of a nested document (e.g. `status`) as efficiently as for any other non-nested field (e.g `summary`). That is not usually the case in a relational DB.
+It's possible to argue that the same could be achieved in relational DB as well. The nested `custom_fields` document could be stored as json field. The difference it that Mongo can query for any field of a nested document (e.g. `status`) as efficiently as for any other non-nested field (e.g `summary`). That is not usually the case in a relational DB.
 
 Other more general advantages of MongoDB are:
 1. *Flexible document schemas*.
