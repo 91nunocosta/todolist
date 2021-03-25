@@ -6,6 +6,7 @@ from eve.auth import TokenAuth
 from eve_swagger import get_swagger_blueprint
 
 from todolist import __version__
+from todolist.settings import SETTINGS
 from todolist.auth.tokens import check_token
 from todolist.auth.passwords import password_hash
 from todolist.login import login
@@ -33,7 +34,7 @@ def replace_password_with_hash(items: Iterable[Dict[str, Any]]) -> None:
         account_item["password"] = password_hash(password)
 
 
-app = Eve(auth=JWTTokenAuth)
+app = Eve(auth=JWTTokenAuth, settings=SETTINGS)
 
 
 def tasks_collection():
