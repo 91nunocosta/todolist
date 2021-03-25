@@ -1,4 +1,5 @@
 from todolist.app import create_app
 
-if __name__ == "__main__":
+
+def run():
     create_app().run()

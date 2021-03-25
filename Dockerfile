@@ -2,21 +2,13 @@ FROM python
 
 RUN pip install poetry
 
-WORKDIR app
+WORKDIR /app
 
+# builds the python lib
 COPY poetry.lock pyproject.toml ./
-
-RUN poetry install
-
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-dev --no-interaction --no-ansi
-
 COPY ./todolist todolist
+RUN poetry build --format wheel
 
-RUN poetry build
+RUN pip install dist/todolist-0.1.0-py3-none-any.whl
 
-RUN poetry install
-
-WORKDIR /app/todolist
-
-ENTRYPOINT ["poetry", "run", "python", "run.py", "--host=0.0.0.0", "--port=5000"]
+ENTRYPOINT ["todolist"]
