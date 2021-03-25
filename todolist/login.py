@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 from flask import current_app, request
 
 from todolist.auth.passwords import check_password

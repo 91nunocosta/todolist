@@ -1,6 +1,3 @@
-from typing import Any, Dict, Iterable, List, Set
-from bson.objectid import ObjectId
-
 from tests.helpers import items_without_meta
 
 

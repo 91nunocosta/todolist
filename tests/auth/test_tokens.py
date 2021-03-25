@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from datetime import datetime
 
 from unittest.mock import MagicMock, patch
@@ -10,7 +9,7 @@ from freezegun import freeze_time
 from todolist.auth.tokens import check_token, generate_token, SIGNATURE_ALG
 
 
-FAKE_JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MW51bm9jb3N0YUBnbWFpbC5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.UURXWQ_jcg5V8OmdeyA6quk7-9HMNntUmm4JWsiS-0U"
+FAKE_JWT_TOKEN = "fake_token"
 FAKE_SECRET = "fake_secret"
 
 

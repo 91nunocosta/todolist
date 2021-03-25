@@ -1,5 +1,3 @@
-from typing import Any, Dict, Iterable, List, Set
-from bson.objectid import ObjectId
 import pymongo
 
 from tests.helpers import items_without_meta
@@ -30,7 +28,7 @@ def test_update_task(client, db, user, token):
 
     updated_task = db.tasks.find_one({"_id": _id})
     assert updated_task is not None
-    assert updated_task["done"] == True
+    assert updated_task["done"]
 
 
 def test_update_task_of_another_user(client, db, user, token, another_user):
@@ -55,7 +53,7 @@ def test_update_task_of_another_user(client, db, user, token, another_user):
     assert response.status_code == 404
 
     # ensures nothing was changed
-    assert db.tasks.find_one({"_id": _id})["done"] == False
+    assert not db.tasks.find_one({"_id": _id})["done"]
 
 
 def test_unauthorized_update_task(db, client):

@@ -17,6 +17,7 @@ pylint = "^2.7.2"
 black = {version = "^20.8b1", allow-prereleases = true}
 freezegun = "^1.1.0"
 rope = "^0.18.0"
+flake8 = "^3.9.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -4,8 +4,10 @@ import os
 SETTINGS = {
     "SERVER_NAME": os.environ.get("SERVER_NAME", "0.0.0.0:5000"),
     "MONGO_HOST": os.environ.get("MONGO_HOST", "localhost"),
-    # The next setting disables concurrency control (https://docs.python-eve.org/en/stable/features.html#concurrency).
-    # Concurrency control ensures that two clients requesting a change to a same item don't interfer with each other.
+    # The next setting disables concurrency control
+    # (https://docs.python-eve.org/en/stable/features.html#concurrency).
+    # Concurrency control ensures that two clients requesting a change to a same item
+    # don't interfer with each other.
     # The clients must prove it knows the latest version of the item.
     # For that it needs to provide the correct etag (an hash).
     # The etag is returned by the server on each operation over the item.
