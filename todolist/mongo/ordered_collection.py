@@ -8,7 +8,7 @@ from pymongo.collection import Collection
 
 
 def check_position(
-    collection: Collection, position: int, query: Dict[str, Any] = {}
+    collection: Collection, position: int, query: Dict[str, Any] = None
 ) -> None:
     """
     Check if a position is valid in a given collections.
@@ -19,6 +19,9 @@ def check_position(
 
     Raises ValueError if any of the above conditions is violated.
     """
+    if query is None:
+        query = {}
+
     if position <= 0:
         raise ValueError("Position should be greather than 0.")
 
@@ -29,7 +32,7 @@ def check_position(
 def add_position(
     collection: Collection,
     position: int,
-    query: Dict[str, Any] = {},
+    query: Dict[str, Any] = None,
 ) -> None:
     """
     Add a position to a MongoDB collection that is ordered by a position field.
@@ -38,6 +41,9 @@ def add_position(
     By other words, the positions of those items are incremented by one.
     No item is actually added.
     """
+    if query is None:
+        query = {}
+
     if position <= 0:
         raise ValueError("Position should be greather than 0.")
 
@@ -55,7 +61,7 @@ def add_position(
 def remove_position(
     collection: Collection,
     position: int,
-    query: Dict[str, Any] = {},
+    query: Dict[str, Any] = None,
 ):
     """
     Remove a position from a MongoDB collection that is ordered by a position field.
@@ -63,6 +69,9 @@ def remove_position(
     All items after the position are shifted (decremented by one) to the left.
     By other words, the positions of those items are decremented by one.
     """
+    if query is None:
+        query = {}
+
     check_position(collection, position)
 
     query.update({"position": {"$gt": position}})
@@ -74,11 +83,14 @@ def update_position(
     collection: Collection,
     old_position: int,
     new_position: int,
-    query: Dict[str, Any] = {},
+    query: Dict[str, Any] = None,
 ) -> None:
     """
     Updates a position in a MongoDB collection that is ordered by a position field.
     """
+    if query is None:
+        query = {}
+
     if old_position == new_position:
         return
 
@@ -100,10 +112,12 @@ def update_position(
     )
 
 
-def get_last_position(collection: Collection, query: Dict[str, Any] = {}) -> int:
+def get_last_position(collection: Collection, query: Dict[str, Any] = None) -> int:
     last_items = (
         collection.find(query).sort([("position", pymongo.DESCENDING)]).limit(1)
     )
+    if query is None:
+        query = {}
 
     if last_items.count() < 1:
         return 0
