@@ -252,7 +252,7 @@ The operation of reordering tasks is the more challenging to model with the CRUD
 
 The only non-trivial aspect of the implementation is managing the task's positions. A (possibly non-optimal) option is to store a _position_ field in the tasks. In this approach adding, removing or moving a task implies, in the worst case, to shift the positions of all tasks. By other words, the time complexity of those operations is _O(n)_, for _n_ tasks.
 
-But if we take into account that _n_ is not all tasks in DB, but only the tasks of a particular user, the scenario seems much better. It's reasonable to assume that there is a constant limit (say _c=10000_, but you can change it) of tasks that is manageable by a single human user. Creating more tasks than that wouldn't be an easy task for anyone (and certainly not very useful.) Under this assumption _n_ becomes _c_, and time complexity _O(1)_ (assuming that the DB can find the tasks of the user in _O(1)_ time).
+But if we take into account that _n_ is not all tasks in DB, but only the tasks of a particular user, the scenario seems much better. It's reasonable to assume that there is a constant limit (say _c=10000_, but you can change it) of tasks that is manageable by a single human user. Creating more tasks than that wouldn't be an easy task for anyone (and certainly not very useful.) Under this assumption _n_ becomes _c_, and time complexity _O(1)_ (assuming that the DB can find each task of the user in _O(1)_ time).
 
 For this reason, I chose to follow this simple approach of storing the _positions_ inside the tasks. But if the above assumption changed, or the constant factor in the time complexity needs to be minimal, it could make sense to look for a more optimal solution. 
 
