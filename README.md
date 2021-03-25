@@ -51,26 +51,6 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] All endpoints should return JSON responses.
 
-
-# TODO
-
-- [x] add docker compose for running locally
-
-- [x] add instructions for running to the README
-
-- [x] add API documentation
-
-- [x] add discussion of stack and design decisions to the README
-
-- [x] complete next steps on README
-
-- [ ] add tox and code quality analysis
-
-- [ ] improve code quality
-
-- [ ] improve docker
-
-
 # How to run locally
 
 To run the application locally you will need:
@@ -184,23 +164,25 @@ Only the tasks of the authenticated user are considered. Using the above analogy
 
 When the position of a task is updated (or some task is added or removed) the positions of the remaining tasks of the same user are also updated. The positions are always kept contiguous from _1_ to _n_ (as if in an array), where _n_ is the number of tasks of the authenticated user. The order of each task in relation with the other tasks is perserved. The only execption is for the task whose position changed.
 
-# How to run unit tests locally
+# Code quality:
 
-To test the application locally you will need:
+There are some code quality checks applied here:
+1. linting
+1. type checking (as python is an interpreted language, it's possible to run a program even if the type annotations are wrong)
+1. unit test
+1. test coverage (in this case configured to 100%).
+
+These verifications are preformed by several tools. [Tox](https://tox.readthedocs.io/en/latest/) is used to automate the entire verification pipeline. You can check which tools are used in the [tox configuration](tox.ini)
+
+To run the code quality verifications in your machine you will need:
 - python3
 - pip
 - [docker](https://docs.docker.com/engine/install/)
 - [docker-compose](https://docs.docker.com/compose/install/)
 
-[Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies in an auto-contained [virtual environment](https://docs.python.org/3/tutorial/venv.html).
-To install it, run:
+To install `tox` execute:
 ```
-$ pip install poetry
-```
-
-Now you can easily install the python dependencies in the project:
-```
-$ poetry install
+$ pip install tox
 ```
 
 To be able to run the tests, an instance of MongoDB is needed. For that run:
@@ -208,9 +190,9 @@ To be able to run the tests, an instance of MongoDB is needed. For that run:
 $ docker-compose -f docker-file-dev.yaml up -d
 ```
 
-Finally, you can run the tests:
+To execute the verifications, run:
 ```
-$ poetry run pytest
+$ tox
 ```
 
 For stopping the MongoDB instance (and releasing all the docker resources needed for it), run:
