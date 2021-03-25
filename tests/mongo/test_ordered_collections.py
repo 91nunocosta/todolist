@@ -1,10 +1,13 @@
 import pytest
 from pymongo import ASCENDING, MongoClient
 
-from todolist.mongo.ordered_collection import (add_position, check_position,
-                                               get_last_position,
-                                               remove_position,
-                                               update_position)
+from todolist.mongo.ordered_collection import (
+    add_position,
+    check_position,
+    get_last_position,
+    remove_position,
+    update_position,
+)
 
 
 @pytest.fixture
