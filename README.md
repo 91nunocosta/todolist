@@ -80,9 +80,9 @@ $ curl "http://0.0.0.0:5000/api-docs"
 ```
 This request returns you the Open API spec mentioned in the next section.
 
-You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configuration also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning. Note that docker-compose is not intended for production. A different secret (not stored in git) would be used in production.
+You can run the script [examples.sh](examples.sh). The script contains some examples of valid requests. You should get success responses to all requests, if no change was made to the database.
 
-If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](doc/postman_collection.json) and try the requests there.
+If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](doc/postman_collection.json) and try the requests there. 
 
 Once you are done, stop the docker containers running:
 ```
@@ -91,7 +91,7 @@ $ docker-compose down
 
 # API
 
-You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](doc/open-api-spec.json).
+You can find the full [Open API](https://swagger.io/specification/) documentation in [open-api-spec.json](doc/open-api-spec.json).
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
 
@@ -154,11 +154,11 @@ curl --location --request DELETE 'http://0.0.0.0:5000/tasks/605b9e7052a0e74acae7
 
 ## Reorder tasks
 
-To move a task simply change its position value. You can think of the resource tasks as a dynamic array (which is most likely what the front-end would use for holding a list of tasks). The same restrictions apply:
+To move a task simply change its position value. You can think of the resource tasks as a dynamic array (which is most likely what the front-end would use for holding a list of tasks). The same restrictions of the array operations apply:
 
 1. The position can’t be less than the initial position, which in this case is 1.
 
-1. The position can’t be larger than the largest position.
+1. The position can’t be larger than the largest position (except the add operation which accepts the position after the last position).
 
 Only the tasks of the authenticated user are considered. Using the above analogy, each user as an isolated an independent array of tasks.
 
@@ -166,7 +166,7 @@ When the position of a task is updated (or some task is added or removed) the po
 
 # Code quality
 
-There are some code quality checks applied here:
+There are some code quality verifications:
 1. linting
 1. type checking (as python is an interpreted language, it's possible to run a program even if the type annotations are wrong)
 1. unit test
@@ -292,7 +292,7 @@ POST /tasks
 
 In a MonoDB both items can be created in a collection _tasks_ with exactly the same structure they have in the requests. In this way, there is no need to spend extra time thinking about the DB schema: it is equal to the API schema. There may be cases where the mapping can't be one-to-one. But many times it can. That is the case in the API developed here.
 
-It's possible to argue that the same could be achieved in relational DB as well. The nested `custom_fields` document could be stored as json field. The difference it that Mongo can query for any field of a nested document (e.g. `status`) as efficiently as for any other non-nested field (e.g `summary`). That is not usually the case in a relational DB.
+It's possible to argue that the same could be achieved in relational DB as well. The nested `custom_fields` document could be stored as json field. The difference is that Mongo can query for any field of a nested document (e.g. `status`) as efficiently as for any other non-nested field (e.g `summary`). That is not usually the case in a relational DB.
 
 Other more general advantages of MongoDB are:
 1. *Flexible document schemas*.
@@ -307,7 +307,7 @@ There are some situations where using MongoDB would not be appropriate. MongoDB 
 
 ## python eve
 
-[Eve](https://docs.python-eve.org/en/stable/) is a [Flask](https://flask.palletsprojects.com/) extension for building RESTful APIs. It only needs a definition of the resources (see [todolist/settings.py](todolist/settings.py)). Then it provides the CRUD operations for those resources on top of a MongoDB. Most of the time, adding or changing an endpoint is a small change in the definition. In case that such is not possible we can still rely on Flask (see, for example, [todolist/login.py](todolist/login.py)) flexibility. This is why I chose eve. 
+[Eve](https://docs.python-eve.org/en/stable/) is a [Flask](https://flask.palletsprojects.com/) extension for building RESTful APIs. It only needs a definition of the resources (see [todolist/app/settings.py](todolist/app/settings.py)). Then it provides the CRUD operations for those resources on top of a MongoDB. Most of the time, adding or changing an endpoint is a small change in the definition. In case that such is not possible we can still rely on Flask (see, for example, the login endpoint implemented in [todolist/app/auth.py](todolist/app/auth.py)) flexibility. This is why I chose eve. 
 
 With eve we also benefit from the REST constraints without extra work. In particular, some _uniform interface_ constraints that would be laborious to implement:
 1. Resource identification in requests
@@ -317,20 +317,20 @@ With eve we also benefit from the REST constraints without extra work. In partic
  
 # Next steps
 
-There are some steps that I know that I would follow if this was a long term project. But given that it's a one-week project, I will only list them here. This list is not sorted in any particular order. The order would depend on the priorities of the projects.
+There are some steps that I know that I would follow if this was a long term project. But given that it's a one-week project, I will only list them here. This list is not sorted in any particular order. The order would depend on the priorities of the project.
 
-* *Setup HTTPS*. Without HTTPS, a man-in-the-middle attack would easily compromise a user account. The user's tasks information would be compromised. Also, the user account would be entirely compromised. By eavesdropping the authorization token, the attacker would get indefinitely (because the token don't expire — see the next point) access to the user account. That can be prevented if all the HTTP requests are encrypted.
+* *Setup HTTPS*. Without HTTPS, a man-in-the-middle attack would easily compromise a user account. The user's tasks information would be compromised. By eavesdropping the authorization token, the attacker could even get indefinitely (because the token don't expire — see the next point) access to the user account. That can be prevented if all the HTTP requests are encrypted.
 
 * *Manage the expiration of authorization tokens.* The first thing to do would be to add the _exp_ field to the JWT token. That would allow the receivers of the token to reject it when expired. The next step would be to design some mechanism to revoke tokens, which is less trivial. Sending to the auth service a request for revoking a token would not be enough. The previously emitted tokens would still be accepted. 
 
-* *Move authorization to a separate service.* In real-life context, the authorization would likely be used by many services. It would make sense having it has a distinct service. The implementation I did is simple to understand and flexible (e.g. it's easy to change the accounts' schema). But I would also consider some open source authentication server. That would bring more confidence on the system and possibily support more complex authorization protocols (e.g. OpenID Connect). For curiosity I explored some options and found [ORY Hydra](https://www.ory.sh/hydra/), for OpenID Connect, and [https://www.ory.sh/kratos/](https://www.ory.sh/kratos/), for simpler protocols.
+* *Move authorization to a separate service.* In a operational context, the authorization would likely be used by many services. It would make sense having it has a distinct service. The implementation I did is simple to understand and flexible (e.g. it's easy to change the accounts' schema). But I would also consider some open source authentication server. That would bring more confidence on the system and possibily support more complex authorization protocols (e.g. OpenID Connect). For curiosity I explored some options and found [ORY Hydra](https://www.ory.sh/hydra/), for OpenID Connect, and [ORY Kratos](https://www.ory.sh/kratos/), for simpler protocols.
 
-* *Ensure the consistency of task's positions in the DB*. The positions of the tasks are updated in 2 steps: 1) shift the positions that need to be shifted; 2) update the position of the task whose change was requested. There is a small chance that one of the operations fail, bringing the DB to an inconsistent status. I would investigate how to make these sequence of operations atomic.
+* *Ensure the consistency of task's positions in the DB*. The positions of the tasks are updated in 2 steps: 1) shift the positions that need to be shifted; 2) update the position of the task whose change was requested. There is a small chance that one of the operations fail, bringing the DB to an inconsistent status. I would investigate how to make this sequence of operations atomic.
 
 * *Add JSON responses to invalid position errors.* The positions are managed through a hook. That isn't done by eve directly, so we don't have the nice eve's error response format. I could still implement that on my hooks. 
 
 
-* *Ensure optimal management of the positions*. As mentioned above, it's possible that the chosen solution for managing the positions of the tasks is not has efficient as it can. I would spend some time looking for better solutions, until I find some improvement, or I'm convinced that it's not possible to do any better.
+* *Ensure optimal management of the positions*. As mentioned above, it's possible that the chosen solution for managing the positions of the tasks is not as efficient as it can. I would spend some time looking for better solutions, until I find some improvement, or I'm convinced that it's not possible to do any better.
 
 * *Setup CI/CD.* An operational project is not only development. It's important to make sure that moving code to production is a smooth (and frequent) process. That is achieved through good CI/CD pipelines. Some tools and techniques with which I had successful experiences are:
     * [_Trunk based development_](https://trunkbaseddevelopment.com/) — there is a single long-lived git branch. Any other branch should be dedicated to specific features, and should be merged as soon as possible. This approach minimizes technical debt. The less time alternative branches are open, the less the changes that lead to integration problems to solve later.
@@ -359,6 +359,6 @@ The Pull Requests CI/CD pipeline would have the following steps:
 
 1. Send the success status to the Pull Request.
 
-The CI/CD pipeline for the master branch would be only applying the Kubernetes files to production. The docker images were already built in the Pull Request. The deployment was already tested in the PR as well.
+The CI/CD pipeline for the master branch would be only applying the Kubernetes files to production. At this point the docker image is already built by the Pull Request pipeline. The deployment is also already tested.
 
 There are always things to improve. For sure, in a long term project I would find many others. But these are the ones I can think of now.
