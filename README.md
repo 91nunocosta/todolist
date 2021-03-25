@@ -82,7 +82,7 @@ This request returns you the Open API spec mentioned in the next section.
 
 You can find some examples of requests in [examples.sh](examples.sh). Running the script should also work. The docker-compose configuration sets up the database with the needed data. The configuration also contains a JWT secret. The JWT token used in the script was generated for that secret and the username created in the beginning. Note that docker-compose is not intended for production. A different secret (not stored in git) would be used in production.
 
-If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](postman_collection.json) and try the requests there.
+If you prefer to use [Postman](https://www.postman.com/), you can import [postman_collection](doc/postman_collection.json) and try the requests there.
 
 Once you are done, stop the docker containers running:
 ```
@@ -91,7 +91,7 @@ $ docker-compose down
 
 # API
 
-You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](open-api-spec.json).
+You can find the full [Open API](https://swagger.io/specification/) specification in [open-api-spec.json](doc/open-api-spec.json).
 
 It can also be viewed in a nice format in [Swagger Hub](https://app.swaggerhub.com/apis-docs/nunocosta2/Todolist/0.1.0).
 
