@@ -164,7 +164,7 @@ Only the tasks of the authenticated user are considered. Using the above analogy
 
 When the position of a task is updated (or some task is added or removed) the positions of the remaining tasks of the same user are also updated. The positions are always kept contiguous from _1_ to _n_ (as if in an array), where _n_ is the number of tasks of the authenticated user. The order of each task in relation with the other tasks is perserved. The only execption is for the task whose position changed.
 
-# Code quality:
+# Code quality
 
 There are some code quality checks applied here:
 1. linting
@@ -179,6 +179,18 @@ To run the code quality verifications in your machine you will need:
 - pip
 - [docker](https://docs.docker.com/engine/install/)
 - [docker-compose](https://docs.docker.com/compose/install/)
+
+Clone this repository to some directory of your choice:
+
+```bash
+$ git clone git@github.com:91nunocosta/todolist.git
+```
+
+Go inside the project:
+
+```bash
+$ cd todolist
+```
 
 To install `tox` execute:
 ```
