@@ -359,6 +359,6 @@ The Pull Requests CI/CD pipeline would have the following steps:
 
 1. Send the success status to the Pull Request.
 
-The CI/CD pipeline for the master branch would be only applying the Kubernetes files to production. At this point the docker image is already built by the Pull Request pipeline. The deployment is also already tested.
+The CI/CD pipeline for the master branch would be only applying the Kubernetes files to production. At this point the docker image is already built by the Pull Request pipeline. The Kubernetes configuratoins are also already tested.
 
 There are always things to improve. For sure, in a long term project I would find many others. But these are the ones I can think of now.
