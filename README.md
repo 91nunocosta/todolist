@@ -62,7 +62,7 @@ Note: You can think of this as an API endpoint that will be used to handle the d
 
 - [x] add discussion of stack and design decisions to the README
 
-- [ ] complete improvments on README
+- [x] complete next steps on README
 
 - [ ] add tox and code quality analysis
 
@@ -323,20 +323,48 @@ With eve we also benefit from the REST constraints without extra work. In partic
  
 # Next steps
 
-1. Configure HTTPS.
+There are some steps that I know that I would follow if this was a long term project. But given that it's a one-week project, I will only list them here. This list is not sorted in any particular order. The order would depend on the priorities of the projects.
 
-1. Manage expiration of authorization tokens.
+* *Setup HTTPS*. Without HTTPS, a man-in-the-middle attack would easily compromise a user account. The user's tasks information would be compromised. Also, the user account would be entirely compromised. By eavesdropping the authorization token, the attacker would get indefinitely (because the token don't expire — see the next point) access to the user account. That can be prevented if all the HTTP requests are encrypted.
 
-1. Setup CI/CD.
+* *Manage the expiration of authorization tokens.* The first thing to do would be to add the _exp_ field to the JWT token. That would allow the receivers of the token to reject it when expired. The next step would be to design some mechanism to revoke tokens, which is less trivial. Sending to the auth service a request for revoking a token would not be enough. The previously emitted tokens would still be accepted. 
 
-1. Create Helm chart.
+* *Move authorization to a separate service.* In real-life context, the authorization would likely be used by many services. It would make sense having it has a distinct service. The implementation I did is simple to understand and flexible (e.g. it's easy to change the accounts' schema). But I would also consider some open source authentication server. That would bring more confidence on the system and possibily support more complex authorization protocols (e.g. OpenID Connect). For curiosity I explored some options and found [ORY Hydra](https://www.ory.sh/hydra/), for OpenID Connect, and [https://www.ory.sh/kratos/](https://www.ory.sh/kratos/), for simpler protocols.
 
-1. Move authentication to a separate service.
+* *Ensure the consistency of task's positions in the DB*. The positions of the tasks are updated in 2 steps: 1) shift the positions that need to be shifted; 2) update the position of the task whose change was requested. There is a small chance that one of the operations fail, bringing the DB to an inconsistent status. I would investigate how to make these sequence of operations atomic.
 
-1. Ensure atomicity of task’s position changes to the DB.
+* *Add JSON responses to invalid position errors.* The positions are managed through a hook. That isn't done by eve directly, so we don't have the nice eve's error response format. I could still implement that on my hooks. 
 
-1. Add JSON responses to invalid position errors.
 
-1. Investigate if task’s position operations implementation is optimal.
+* *Ensure optimal management of the positions*. As mentioned above, it's possible that the chosen solution for managing the positions of the tasks is not has efficient as it can. I would spend some time looking for better solutions, until I find some improvement, or I'm convinced that it's not possible to do any better.
 
-1. Make test code simpler.
+* *Setup CI/CD.* An operational project is not only development. It's important to make sure that moving code to production is a smooth (and frequent) process. That is achieved through good CI/CD pipelines. Some tools and techniques with which I had successful experiences are:
+    * [_Trunk based development_](https://trunkbaseddevelopment.com/) — there is a single long-lived git branch. Any other branch should be dedicated to specific features, and should be merged as soon as possible. This approach minimizes technical debt. The less time alternative branches are open, the less the changes that lead to integration problems to solve later.
+    * [_Jenkins_](https://www.jenkins.io/) — it's not the more user-friendly (developer-friendly ?) CI/CD tool. But it's open source and allows to materialize any imaginable CI/CD pipeline.
+    * [_Kubernetes_](https://kubernetes.io/) — it's a very flexible way (e.g. avoids vendor lock-in with respect to cloud providers) to make sure that things that work in my machine also work in production. I had some good experiences with it. So, I could create the Kubernetes files in the repo and setup the CI/CD to apply them to the hosting environments. Another options, which I want to explore some day is [_Helm_](https://helm.sh/). It makes the management of complex Kubernetes configurations easier.
+
+There would be 2 CI/CD pipelines. One for the feature branches and another for the master branch. The master branch would be protected. The feature branches could only be merged through a Pull Request passing the CI/CD. 
+
+The Pull Requests CI/CD pipeline would have the following steps:
+
+1. Run the static analysis code quality checks.
+
+1. Build the python library with the codebase (the API implementation).
+
+1. Run the unit tests on the library.
+
+1. Build a docker image with the library.
+
+1. Run some smoke tests to verify that the docker image works as expected.
+
+1. Push the image to some docker registry.
+
+1. Apply the Kubernetes files (or Helm charts) in some testing Kubernetes cluster (or namespace).
+
+1. Run some smoke tests to verify that the deployment works as expected.
+
+1. Send the success status to the Pull Request.
+
+The CI/CD pipeline for the master branch would be only applying the Kubernetes files to production. The docker images were already built in the Pull Request. The deployment was already tested in the PR as well.
+
+There are always things to improve. For sure, in a long term project I would find many others. But these are the ones I can think of now.
