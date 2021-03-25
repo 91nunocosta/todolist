@@ -1,5 +1,5 @@
-from bson.objectid import ObjectId
 import pymongo
+from bson.objectid import ObjectId
 
 from tests.helpers import items_without_meta
 

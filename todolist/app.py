@@ -1,20 +1,17 @@
 from typing import Any, Dict, Iterable
-from flask import abort
+
 from eve import Eve
 from eve.auth import TokenAuth
-
 from eve_swagger import get_swagger_blueprint
+from flask import abort
 
 from todolist import __version__
-from todolist.settings import SETTINGS
-from todolist.auth.tokens import check_token
 from todolist.auth.passwords import password_hash
+from todolist.auth.tokens import check_token
 from todolist.login import login
-from todolist.mongo.ordered_collection import (
-    add_position,
-    remove_position,
-    update_position,
-)
+from todolist.mongo.ordered_collection import (add_position, remove_position,
+                                               update_position)
+from todolist.settings import SETTINGS
 
 
 class JWTTokenAuth(TokenAuth):

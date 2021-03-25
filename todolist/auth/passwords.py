@@ -1,4 +1,4 @@
-from bcrypt import checkpw, hashpw, gensalt
+from bcrypt import checkpw, gensalt, hashpw
 
 
 def check_password(recieved_password: str, stored_password: bytes) -> bool:

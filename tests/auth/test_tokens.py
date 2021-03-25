@@ -1,13 +1,10 @@
 from datetime import datetime
-
 from unittest.mock import MagicMock, patch
 
 import pytest
-
 from freezegun import freeze_time
 
-from todolist.auth.tokens import check_token, generate_token, SIGNATURE_ALG
-
+from todolist.auth.tokens import SIGNATURE_ALG, check_token, generate_token
 
 FAKE_JWT_TOKEN = "fake_token"
 FAKE_SECRET = "fake_secret"

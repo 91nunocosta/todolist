@@ -1,12 +1,10 @@
 from datetime import datetime
-
 from unittest.mock import patch
 
 from freezegun import freeze_time
 
-from todolist.auth.tokens import check_token, generate_token
 from todolist.auth.passwords import check_password, password_hash
-
+from todolist.auth.tokens import check_token, generate_token
 
 FAKE_JWT_SECRET = "fake_secret"
 

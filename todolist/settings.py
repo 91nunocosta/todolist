@@ -1,6 +1,5 @@
 import os
 
-
 SETTINGS = {
     "SERVER_NAME": os.environ.get("SERVER_NAME", "0.0.0.0:5000"),
     "MONGO_HOST": os.environ.get("MONGO_HOST", "localhost"),

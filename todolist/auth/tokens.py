@@ -1,10 +1,8 @@
-from typing import Any, Dict
 import os
-
 from datetime import datetime
+from typing import Any, Dict
 
 from jwt import decode, encode
-
 
 SIGNATURE_ALG = "HS256"
 
