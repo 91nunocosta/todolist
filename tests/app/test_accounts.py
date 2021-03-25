@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from tests.helpers import items_without_meta
+from tests.app.helpers import items_without_meta
 
 
 def test_add_account(db, client):

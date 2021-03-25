@@ -1,4 +1,4 @@
-from tests.helpers import items_without_meta
+from tests.app.helpers import items_without_meta
 
 
 def test_list_tasks(db, client, user, token, another_user):

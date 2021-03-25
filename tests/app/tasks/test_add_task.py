@@ -1,7 +1,7 @@
 import pymongo
 from bson.objectid import ObjectId
 
-from tests.helpers import items_without_meta
+from tests.app.helpers import items_without_meta
 
 
 def test_add_task(client, db, user, token):
