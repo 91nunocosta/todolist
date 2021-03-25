@@ -258,7 +258,69 @@ For this reason, I chose to follow this simple approach of storing the _position
 
 ## Stack
 
+The stack I chose to use is.
+1. python3 
+1. [MongoDB](https://www.mongodb.com/)
+1. [python eve](https://docs.python-eve.org/en/stable/)
 
+Here are the reasons for the choice.
+
+### python
+
+It's the programming language with which I'm more proficient. It's not as performant as a compiled language. But in a REST back-end mainly concerned with data persistence, it's reasonable to assume that the such difference is not important. The agility of development would be more important. As a high-level language, with powerful abstractions, python makes agility easy to achieve.
+
+## MongoDB
+
+Modeling a RESTful resource as a collection of documents is usually easier than modeling it with a relation (aka table). In the documents case, the mapping is, most of the time, one-to-one. An item of the API with certain fields can be stored as a document with exactly the same fields (including any nesting). 
+
+Consider the following requests.
+```
+POST /tasks
+{
+    "summary": "A task.",
+    "done": true,
+    "type": "simple",
+}
+```
+
+```
+
+POST /tasks
+{
+    "summary": "A task.",
+    "done": true,
+    "type": "custom",
+    "custom_fields": {
+        "status": "Approved"
+    }
+}
+```
+
+In a MonoDB both items can be created in a collection _tasks_ with exactly the same structure they have in the requests. If the request body is json, as in this example, it can even be passed to Mongo without any change. In this way, the is no need to spend extra time thinking about the DB schema: it is equal to the API schema. There may be cases where the mapping can't be one-to-one. But many times it can. That is the case in the API developed here.
+
+It's possible to argue that the same could be achieved in relational DB as well. The nested `custom_fields` document could be stored as json field. But Mongo can query for any field of a nested document (e.g. `status`) as efficiently as for any other non-nested field (e.g `summary`). That is not usually the case in a relational DB.
+
+Other more general advantages of MongoDB are:
+1. *Flexible document schemas*.
+
+1. *Code native data access* — data can be accessed using native programming language's data structures (e.g. python's dict, JavaScript's associative array, Java's Map). There is no need for ORM or other kind of wrappers.
+
+1. *Change-friendly design* — changing the DB schema doesn't imply any downtime or complex migration process. It is possible to start writing the data in a new format at any time without disruptions. Older data can be migrated to the new format at any time. 
+
+1. *Easy horizontal scale out* — MongoDB is designed to be a distributed database. It is possible to create clusters with real-time replication, and shard large or high-throughput collections across multiple clusters to sustain performance and scaler horizontally.
+
+There are some situations where using MongoDB would not be appropriate. MongoDB violates [ACID](https://en.wikipedia.org/wiki/ACID) (atomicity, consistency, isolation, durability) (see [here](https://en.wikipedia.org/wiki/MongoDB#Transactions)). This means that failed operations (e.g. after power failures) may make the stored data invalid. There are contexts where this is not acceptable (e.g. banking). I assumed that it's not the case in this exercise.
+
+## python eve
+
+[Eve](https://docs.python-eve.org/en/stable/) is a [Flask](https://flask.palletsprojects.com/) extension for building RESTful APIs. It only needs a definition of the resources (see [todolist/settings.py](todolist/settings.py)). Then it provides the CRUD operations for those resources on top of a MongoDB. Most of the time, adding or changing an endpoint is a small change in the definition. In case that such is not possible we can still rely on Flask (see, for example, [todolist/login.py](todolist/login.py)) flexibility. This is why I chose eve. 
+
+With eve we also benefit from the REST constraints without extra work. In particular, some _uniform interface_ constraints that would be laborious to implement:
+1. Resource identification in requests
+1. Self-descriptive messages
+1. Hypermedia as the engine of application state (HATEOAS)
+
+ 
 # Next steps
 
 1. Configure HTTPS.
@@ -268,6 +330,8 @@ For this reason, I chose to follow this simple approach of storing the _position
 1. Setup CI/CD.
 
 1. Create Helm chart.
+
+1. Move authentication to a separate service.
 
 1. Ensure atomicity of task’s position changes to the DB.
 
