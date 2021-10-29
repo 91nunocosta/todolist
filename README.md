@@ -199,7 +199,7 @@ $ pip install tox
 
 To be able to run the tests, an instance of MongoDB is needed. For that run:
 ```
-$ docker-compose -f docker-file-dev.yaml up -d
+$ docker-compose -f docker-compose-dev.yaml up -d
 ```
 
 To execute the verifications, run:
