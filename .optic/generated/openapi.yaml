@@ -1,0 +1,330 @@
+openapi: 3.0.3
+info:
+ title: Optic Generated OpenAPI
+ version: 1.0.0
+paths:
+ /login:
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        username:
+         type: string
+        password:
+         type: string
+       required:
+        - username
+        - password
+   responses:
+    '200':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         token:
+          type: string
+        required:
+         - token
+    '404':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _status:
+          type: string
+         _error:
+          type: object
+          properties:
+           message:
+            type: string
+           code:
+            type: number
+          required:
+           - message
+           - code
+        required:
+         - _status
+         - _error
+ /tasks:
+  get:
+   responses:
+    '200':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _meta:
+          type: object
+          properties:
+           total:
+            type: number
+           page:
+            type: number
+           max_results:
+            type: number
+          required:
+           - total
+           - page
+           - max_results
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+           parent:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+           - parent
+         _items:
+          type: array
+          items:
+           type: object
+           properties:
+            summary:
+             type: string
+            position:
+             type: number
+            done:
+             type: boolean
+            _updated:
+             type: string
+            _links:
+             type: object
+             properties:
+              self:
+               type: object
+               properties:
+                title:
+                 type: string
+                href:
+                 type: string
+               required:
+                - title
+                - href
+             required:
+              - self
+            _id:
+             type: string
+            _created:
+             type: string
+           required:
+            - summary
+            - position
+            - done
+            - _updated
+            - _links
+            - _id
+            - _created
+        required:
+         - _meta
+         - _links
+         - _items
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        summary:
+         type: string
+        position:
+         type: number
+        done:
+         type: boolean
+       required:
+        - summary
+        - position
+        - done
+   responses:
+    '201':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _updated:
+          type: string
+         _status:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - _updated
+         - _status
+         - _links
+         - _id
+         - _created
+    '500':
+     description: ''
+     content:
+      text/html:
+       schema:
+        type: string
+ /accounts:
+  post:
+   requestBody:
+    content:
+     application/json:
+      schema:
+       type: object
+       properties:
+        username:
+         type: string
+        password:
+         type: string
+       required:
+        - username
+        - password
+   responses:
+    '201':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         _updated:
+          type: string
+         _status:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - _updated
+         - _status
+         - _links
+         - _id
+         - _created
+ /accounts/{accountId}:
+  parameters:
+   -
+    name: accountId
+    in: path
+    schema:
+     type: string
+    required: true
+  get:
+   responses:
+    '200':
+     description: ''
+     content:
+      application/json:
+       schema:
+        type: object
+        properties:
+         username:
+          type: string
+         password:
+          type: string
+         _updated:
+          type: string
+         _links:
+          type: object
+          properties:
+           self:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+           parent:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+           collection:
+            type: object
+            properties:
+             title:
+              type: string
+             href:
+              type: string
+            required:
+             - title
+             - href
+          required:
+           - self
+           - parent
+           - collection
+         _id:
+          type: string
+         _created:
+          type: string
+        required:
+         - username
+         - password
+         - _updated
+         - _links
+         - _id
+         - _created

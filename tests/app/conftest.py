@@ -1,8 +1,19 @@
+import requests
 from unittest.mock import patch
+
+from werkzeug.test import Client
 
 import pytest
 
 from todolist.app import create_app
+
+
+class AppClient(Client):
+
+    def open(self, path, **kwargs):
+        server_name = self.app.default_config['SERVER_NAME']
+        url = f'{server_name}{path}'
+        return requests.open(url, **kwargs)
 
 
 @pytest.fixture
